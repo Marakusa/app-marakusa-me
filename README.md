@@ -31,3 +31,11 @@ Under `src` include file `public.config.json` in the following format:
     }
 }
 ```
+
+## How to run
+
+NOTICE: The frontend requires a backend server and cdn server running.
+```
+npm i
+npm run dev
+```
