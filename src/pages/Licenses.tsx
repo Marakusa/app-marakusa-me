@@ -172,7 +172,10 @@ function Licenses() {
                             {redeemed.error ? (
                                 <p className="text-red-400">{redeemed.error}</p>
                             ) : redeemed.redeemed ? (
-                                <p className="text-zinc-400">License redeemed successfully!</p>
+                                <>
+                                    <p className="text-zinc-400">License redeemed successfully!</p>
+                                    <p className="text-green-400">To get the roles run the <strong>/sync</strong> command anywhere on the <a href="https://discord.com/invite/47SrTE3Spw" target="_blank" className="text-blue-400">Mara's Frosty Lodge</a> server.</p>
+                                </>
                             ) : (<></>)}
                         </div>
                     </div>

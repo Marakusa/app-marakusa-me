@@ -262,29 +262,6 @@ function Settings() {
                                 </div>
                             )}
                         </div>
-                        <div className="flex flex-row gap-2 items-center">
-                            <img src="/gumroad.svg" alt="Gumroad" className="w-8 h-8" draggable="false" />
-                            <p className="text-lg ml-1">Gumroad</p>
-                            {profile?.data ? (profile as any).data.gumroad_id ? (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-green-400">
-                                    <CiCircleCheck className="inline w-5 h-5" />
-                                    <p className="text-sm">Connected</p>
-                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors" 
-                                        onClick={() => { confirmDisconnect("gumroad") }}>Disconnect</div>
-                                </div>
-                            ) : (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-red-400">
-                                    <CiCircleRemove className="inline w-5 h-5" />
-                                    <p className="text-sm">Not Connected</p>
-                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors" 
-                                        onClick={() => { connectConnection("gumroad") }}>Connect</div>
-                                </div>
-                            ) : (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-zinc-400">
-                                    <p className="text-sm">...</p>
-                                </div>
-                            )}
-                        </div>
                     </div>
                 </div>
 
