@@ -1,4 +1,4 @@
-import { apiPath, discordClientId, discordRedirectUri, gumroadClientId, gumroadRedirectUri } from "../public.config.json";
+import { apiPath, discordClientId, discordRedirectUri } from "../public.config.json";
 import { CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { useProfile } from "../ProfileContext";
 import { useNavigate } from "react-router-dom";
@@ -52,9 +52,6 @@ function Settings() {
         switch (platform) {
             case "discord":
                 window.location.href = `https://discord.com/oauth2/authorize?response_type=code&client_id=${discordClientId}&scope=email+identify&redirect_uri=${encodeURIComponent(discordRedirectUri)}`;
-                break;
-            case "gumroad":
-                window.location.href = `https://gumroad.com/oauth/authorize?client_id=${gumroadClientId}&response_type=code&scope=view_profile&redirect_uri=${encodeURIComponent(gumroadRedirectUri)}`;
                 break;
             default:
                 console.error("Unknown platform");
