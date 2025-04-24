@@ -17,7 +17,6 @@ function Auth() {
         const code = urlParams.get("code");
         const state = urlParams.get("state");
         const signout = urlParams.get("signout");
-        const platform = urlParams.get("platform");
 
         if (signout) {
             // Send the code and state to the server
@@ -55,16 +54,7 @@ function Auth() {
         }
         
         if (!auth.error && !auth.authenticated && ((!localStorage.getItem("auth") && !localStorage.getItem("token")) || (code && state))) {
-            var url = "";
-            switch (platform) {
-                case "gumroad":
-                    url = "/api/v1/auth/gumroad";
-                    break;
-                case "discord":
-                default:
-                    url = "/api/v1/auth/discord";
-                break;
-            }
+            var url = "/api/v1/auth/discord";
 
             // Send the code and state to the server
             fetch(apiPath + url, {
@@ -128,86 +118,42 @@ function Auth() {
                             return;
                         } else {
                             if (data.profile) {
-                                switch (platform) {
-                                    case "gumroad":
-                                        if ((data.profile as any).gumroad_id !== null) {
-                                            console.log("Already connected to Gumroad");
-                                            navigate("/");
-                                        }
-                                        else {
-                                            fetch(apiPath + "/api/v1/connect/gumroad", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json"
-                                                },
-                                                body: JSON.stringify({
-                                                    auth: localStorage.getItem("auth"),
-                                                    token: localStorage.getItem("token"),
-                                                    code: code,
-                                                    state: state
-                                                })
-                                            })
-                                                .then((response) => response.json())
-                                                    .then((data) => {
-                                                        if (data.error) {
-                                                            setAuth({
-                                                                authenticated: false,
-                                                                error: data.error
-                                                            });
-                                                            return;
-                                                        }
-                    
-                                                        // Redirect to the library
-                                                        setAuth({
-                                                            authenticated: true,
-                                                            error: null
-                                                        });
-                                                        fetchProfile();
-                                                        navigate("/settings");
+                                if ((data.profile as any).discord_id !== null) {
+                                    console.log("Already connected to Discord");
+                                    navigate("/");
+                                }
+                                else {
+                                    console.log("Not connected to Discord");
+                                    fetch(apiPath + "/api/v1/connect/discord", {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json"
+                                        },
+                                        body: JSON.stringify({
+                                            auth: localStorage.getItem("auth"),
+                                            token: localStorage.getItem("token"),
+                                            code: code,
+                                            state: state
+                                        })
+                                    })
+                                        .then((response) => response.json())
+                                            .then((data) => {
+                                                if (data.error) {
+                                                    setAuth({
+                                                        authenticated: false,
+                                                        error: data.error
                                                     });
-                                        }
-                                        break;
-                                    case "discord":
-                                    default:
-                                        if ((data.profile as any).discord_id !== null) {
-                                            console.log("Already connected to Discord");
-                                            navigate("/");
-                                        }
-                                        else {
-                                            console.log("Not connected to Discord");
-                                            fetch(apiPath + "/api/v1/connect/discord", {
-                                                method: "POST",
-                                                headers: {
-                                                    "Content-Type": "application/json"
-                                                },
-                                                body: JSON.stringify({
-                                                    auth: localStorage.getItem("auth"),
-                                                    token: localStorage.getItem("token"),
-                                                    code: code,
-                                                    state: state
-                                                })
-                                            })
-                                                .then((response) => response.json())
-                                                    .then((data) => {
-                                                        if (data.error) {
-                                                            setAuth({
-                                                                authenticated: false,
-                                                                error: data.error
-                                                            });
-                                                            fetchProfile();
-                                                            return;
-                                                        }
-                    
-                                                        // Redirect to the library
-                                                        setAuth({
-                                                            authenticated: true,
-                                                            error: null
-                                                        });
-                                                        fetchProfile();
-                                                        navigate("/settings");
-                                                    });
-                                        }
-                                        break;
+                                                    fetchProfile();
+                                                    return;
+                                                }
+            
+                                                setAuth({
+                                                    authenticated: true,
+                                                    error: null
+                                                });
+                                                fetchProfile();
+                                                navigate("/settings");
+                                            });
                                 }
                             }
                         }
