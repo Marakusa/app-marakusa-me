@@ -308,7 +308,7 @@ function Library({ archived }: LibraryProps) {
                         <h3>Official stores</h3>
                         <p>My products are available on the following stores.</p>
                         <div className="flex flex-col lg:flex-row gap-5 mt-5">
-                            <a href="https://jinxxy.com/Marakusa" target="_blank" className="bg-[url(/jinxxy-large.png)] bg-cover bg-no-repeat bg-center w-54 h-18 hover:scale-102 rounded-xl border border-purple-950 shadow-lg shadow-black/20"></a>
+                            <a href="https://jinxxy.com/Marakusa/products" target="_blank" className="bg-[url(/jinxxy-large.png)] bg-cover bg-no-repeat bg-center w-54 h-18 hover:scale-102 rounded-xl border border-purple-950 shadow-lg shadow-black/20"></a>
                             <a href="https://marakusa.gumroad.com" target="_blank" className="bg-[url(/gumroad-large.png)] bg-cover bg-no-repeat bg-center w-54 h-18 hover:scale-102 rounded-xl border border-pink-400 shadow-lg shadow-black/20"></a>
                             <a href="https://marakusa.lemonsqueezy.com" target="_blank" className="bg-[url(/lemonsqueezy-large.png)] bg-cover bg-no-repeat bg-center w-54 h-18 hover:scale-102 rounded-xl border border-blue-900 shadow-lg shadow-black/20"></a>
                         </div>

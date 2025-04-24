@@ -85,7 +85,7 @@ function Header() {
                             ? 'hover:bg-zinc-950/50 hover:border-zinc-900'
                             : 'hover:bg-zinc-900'
                         }`}>Licenses</Link>
-                    <a href="https://jinxxy.com/Marakusa" target="_blank" className={`text-white p-3 rounded-lg border border-transparent ${
+                    <a href="https://jinxxy.com/Marakusa/products" target="_blank" className={`text-white p-3 rounded-lg border border-transparent ${
                         isFloating
                             ? 'hover:bg-zinc-950/50 hover:border-zinc-900'
                             : 'hover:bg-zinc-900'
