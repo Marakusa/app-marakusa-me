@@ -95,7 +95,7 @@ function Header() {
                     ) : null}
 
                     {/* Mobile burger */}
-                    <button onClick={toggleMobileMenu} className="md:hidden p-2 rounded-lg hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
+                    <button onClick={toggleMobileMenu} className="md:hidden p-3 rounded-2xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -105,7 +105,7 @@ function Header() {
 
             {/* Mobile menu drawer */}
             {mobileMenu && (
-                <nav className="md:hidden bg-zinc-900 border-t border-zinc-800 rounded-b-3xl">
+                <nav className="md:hidden bg-zinc-900 border-zinc-800 rounded-b-3xl">
                     <ul className="flex flex-col">
                         {links.map((link) => (
                             <li key={link.label} className="">
@@ -114,13 +114,13 @@ function Header() {
                                         href={link.to}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`block text-white px-4 py-3 border border-zinc-800 hover:bg-zinc-700/50 ${links[links.length - 1].label === link.label ? "rounded-b-3xl" : ""
+                                        className={`block text-white px-4 py-3 border-t border-zinc-800 hover:bg-zinc-700/50 ${links[links.length - 1].label === link.label ? "rounded-b-3xl" : ""
                                             }`}
                                     >
                                         {link.label}
                                     </a>
                                 ) : (
-                                    <Link to={link.to} onClick={toggleMobileMenu} className="block text-white px-4 py-3 border border-zinc-800 hover:bg-zinc-700/50">
+                                    <Link to={link.to} onClick={toggleMobileMenu} className="block text-white px-4 py-3 border-t border-zinc-800 hover:bg-zinc-700/50">
                                         {link.label}
                                     </Link>
                                 )}
