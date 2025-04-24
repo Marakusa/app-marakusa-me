@@ -153,12 +153,12 @@ function Header() {
                                         href={link.to}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""}`}
+                                        className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""} ${profileLinks[0].label === link.label ? "md:rounded-t-3xl" : ""}`}
                                     >
                                         {link.label}
                                     </a>
                                 ) : (
-                                    <Link to={link.to} onClick={toggleProfileMenu} className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""}`}>
+                                    <Link to={link.to} onClick={toggleProfileMenu} className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""} ${profileLinks[0].label === link.label ? "md:rounded-t-3xl" : ""}`}>
                                         {link.label}
                                     </Link>
                                 )}
