@@ -40,9 +40,11 @@ const Resources: React.FC = () => {
 
     return (
         <div>
-            <div className="max-w-3xl mx-auto p-5 my-27">
-                <div className="bg-zinc-900 text-white w-full rounded-3xl shadow-lg shadow-black/20 p-5">
-                    <h1 className="text-2xl font-bold mb-4">VRChat Resources</h1>
+            <div className="md:max-w-4xl mx-auto py-5 md:px-5 my-27">
+                <div className="bg-zinc-900 text-white w-full sm:rounded-3xl shadow-lg shadow-black/20 p-8 md:px-16 md:pb-16 text-left">
+
+                    <h2 className="text-2xl text-center font-bold mb-4">VRChat Resources</h2>
+
                     <p>These packages are required for uploading the avatar.</p>
                     <p className="mt-4">Make sure to download the latest versions of these packages. The links below will take you to the official documentation and download pages.</p>
                     <table className="w-full border-collapse mt-4 rounded-3xl overflow-hidden">
@@ -86,7 +88,9 @@ const Resources: React.FC = () => {
                             ))}
                         </tbody>
                     </table>
-                    <h2 className="text-xl font-semibold mt-6 mb-3">Optional</h2>
+                    
+                    <p className="text-2xl text-start font-bold mt-8 mb-4">Optional</p>
+
                     <p>These packages are optional and include additional features.</p>
                     <table className="w-full border-collapse mt-4 rounded-3xl overflow-hidden">
                         <thead>

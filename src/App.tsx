@@ -12,6 +12,8 @@ import NotFound from "./pages/NotFound";
 import Resources from "./pages/Resources";
 import TermsOfService from "./pages/TermsOfService";
 import RedeemTutorial from "./pages/RedeemTutorial";
+import Docs from "./pages/Docs";
+import Faq from "./pages/Faq";
 
 export default function App() {
   return (
@@ -32,6 +34,8 @@ export default function App() {
           <Route path="/tos" element={<TermsOfService />} />
           <Route path="/product/:currentProductId" element={<Library />} />
           <Route path="/tutorial/redeem" element={<RedeemTutorial />} />
+          <Route path="/docs" element={<Docs />} />
+          <Route path="/docs/faq" element={<Faq />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </ProfileProvider>

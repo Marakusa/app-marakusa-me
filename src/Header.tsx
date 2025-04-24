@@ -55,9 +55,8 @@ function Header() {
     const links = [
         { to: "/", label: "Library" },
         { to: "/licenses", label: "Licenses" },
-        { to: "https://jinxxy.com/Marakusa/products", label: "Jinxxy", external: true },
-        { to: "https://marakusa.gumroad.com", label: "Gumroad", external: true },
-        { to: "https://marakusa.lemonsqueezy.com", label: "Lemon Squeezy", external: true },
+        { to: "https://store.marakusa.me", label: "Stores", external: true },
+        { to: "/docs", label: "Help" },
     ];
 
     const profileLinks = [
