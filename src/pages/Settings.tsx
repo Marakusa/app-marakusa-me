@@ -10,8 +10,8 @@ import { BiSolidWatchAlt } from "react-icons/bi";
 function Settings() {
     const navigate = useNavigate();
     const { profile, fetchProfile } = useProfile();
-    const [ showConfirmDisconnect, setShowConfirmDisconnect ] = useState<string | null>(null);
-    const [ sessions, setSessions ] = useState<any[]>([]);
+    const [showConfirmDisconnect, setShowConfirmDisconnect] = useState<string | null>(null);
+    const [sessions, setSessions] = useState<any[]>([]);
 
     if (profile.fetched === false) {
         fetchProfile();
@@ -38,7 +38,7 @@ function Settings() {
             console.error(data.error);
             return;
         }
-        
+
         if ((profile as any).auth_method === platform) {
             window.location.href = "/auth?signout=1";
             localStorage.removeItem("auth");
@@ -196,7 +196,7 @@ function Settings() {
                     console.error(data.error);
                     return;
                 }
-                
+
                 setSessions((prevSessions) => {
                     return prevSessions.filter((session) => session.id !== sessionId);
                 });
@@ -212,7 +212,7 @@ function Settings() {
 
             {showConfirmDisconnect ? (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" onClick={() => { setShowConfirmDisconnect(null) }}>
-                    <div className="absolute flex flex-col gap-8 justify-center items-center w-150 mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="absolute flex flex-col gap-8 justify-center items-center w-full mx-8 md:w-150 md:mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <p className="text-3xl font-bold">Are you sure you want to disconnect?</p>
                         <p className="text-lg">You will be logged out if you are currently signed in with this platform.</p>
                         <p className="text-lg text-red-400">ALL YOUR LICENSES AND DATA WILL BE UNLINKED IF THIS IS THE LAST CONNECTION.</p>
@@ -225,36 +225,42 @@ function Settings() {
                     </div>
                 </div>
             ) : (<></>)}
-           
-            <div className="flex flex-col gap-8 my-32 justify-start items-start w-full mx-auto">
-                <div className="flex flex-col gap-8 justify-start items-start w-150 mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
+
+            <div className="flex flex-col gap-8 my-32 justify-start items-start w-full mx-auto px-8 md:px-0">
+                <div className="flex flex-col gap-8 justify-start items-start w-full md:w-150 md:mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
                     <p className="text-3xl font-bold">Settings</p>
                     <p className="text-lg">Change your profile settings here.</p>
                 </div>
 
-                <div className="flex flex-col gap-8 justify-start items-start w-150 mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
+                <div className="flex flex-col gap-8 justify-start items-start w-full md:w-150 md:mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
                     <p className="text-3xl font-bold">Connected accounts</p>
                     <p className="text-lg text-left">See what accounts you have connected to your profile.<br />To remove <strong>ALL</strong> your data, <i>disconnect all</i> connections from here.</p>
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 mx-auto sm:mx-0">
                         <div className="flex flex-row gap-2 items-center">
-                            <img src="/discord.svg" alt="Discord" className="w-8 h-8" draggable="false" />
-                            <p className="text-lg ml-1">Discord</p>
+                            <div className="flex flex-col sm:flex-row gap-2 items-center w-fit">
+                                <img src="/discord.svg" alt="Discord" className="w-8 h-8" draggable="false" />
+                                <p className="text-lg ml-1">Discord</p>
+                            </div>
                             {profile?.data ? (profile as any).data.discord_id ? (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-green-400">
-                                    <CiCircleCheck className="inline w-5 h-5" />
-                                    <p className="text-sm">Connected</p>
-                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors" 
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-1 items-center ml-2 text-green-400">
+                                    <div className="flex flex-row gap-1 items-center">
+                                        <CiCircleCheck className="inline w-5 h-5" />
+                                        <p className="text-sm">Connected</p>
+                                    </div>
+                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors"
                                         onClick={() => { confirmDisconnect("discord") }}>Disconnect</div>
                                 </div>
                             ) : (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-red-400">
-                                    <CiCircleRemove className="inline w-5 h-5" />
-                                    <p className="text-sm">Not Connected</p>
-                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors" 
+                                <div className="flex flex-col sm:flex-row gap-1 items-center ml-2 text-red-400">
+                                    <div className="flex flex-row gap-1 items-center">
+                                        <CiCircleRemove className="inline w-5 h-5" />
+                                        <p className="text-sm">Not Connected</p>
+                                    </div>
+                                    <div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 ml-3 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors"
                                         onClick={() => { connectConnection("discord") }}>Connect</div>
                                 </div>
                             ) : (
-                                <div className="flex flex-row gap-1 items-center ml-2 text-zinc-400">
+                                <div className="flex flex-col sm:flex-row gap-1 items-center ml-2 text-zinc-400">
                                     <p className="text-sm">...</p>
                                 </div>
                             )}
@@ -262,21 +268,21 @@ function Settings() {
                     </div>
                 </div>
 
-                <div className="flex flex-col gap-8 justify-start items-start w-150 mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
+                <div className="flex flex-col gap-8 justify-start items-start w-full md:w-150 md:mx-auto bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8 select-none">
                     <p className="text-3xl font-bold">Sessions</p>
                     <p className="text-lg text-left">Check what devices are signed in to your account.</p>
                     <div className="flex flex-col gap-2 w-full">
                         {sessions.length > 0 ? sessions.map((session, index) => {
                             return (
                                 <div key={index} className={(session.current_session ? "text-green-400 " : "") + "flex flex-row gap-4 items-center justify-between bg-zinc-950/25 border border-zinc-800 rounded-3xl shadow-lg shadow-black/20 p-3 px-4 select-none"}>
-                                    {getDeviceType(session.session_info)}
+                                    <div className="hidden sm:block">{getDeviceType(session.session_info)}</div>
                                     <div className="flex-1 flex-col text-left px-2">
                                         <p className="text-sm font-bold uppercase">{parseSession(session.session_info)}</p>
                                         <p className={(session.current_session ? "text-zinc-400" : "text-zinc-400") + " text-sm"}>{session.location ?? "Unknown"} • {session.last_activity}</p>
                                     </div>
                                     {session.current_session ? (
                                         <p className="text-sm">Current session</p>
-                                    ) : (<div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors" 
+                                    ) : (<div className="text-sm bg-zinc-800 text-zinc-300 px-4 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors"
                                         onClick={() => { signOutSession(session.id) }}>Sign Out</div>)}
                                 </div>
                             );
