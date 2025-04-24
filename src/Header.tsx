@@ -20,8 +20,14 @@ function Header() {
         fetchProfile();
     }
 
-    const toggleProfileMenu = () => setProfileMenu(!profileMenu);
-    const toggleMobileMenu = () => setMobileMenu(!mobileMenu);
+    const toggleProfileMenu = () => {
+        setMobileMenu(false);
+        setProfileMenu(!profileMenu);
+    };
+    const toggleMobileMenu = () => {
+        setProfileMenu(false);
+        setMobileMenu(!mobileMenu);
+    };
 
     useEffect(() => {
         const closeProfileMenu = (event: MouseEvent) => {
@@ -52,6 +58,12 @@ function Header() {
         { to: "https://jinxxy.com/Marakusa/products", label: "Jinxxy", external: true },
         { to: "https://marakusa.gumroad.com", label: "Gumroad", external: true },
         { to: "https://marakusa.lemonsqueezy.com", label: "Lemon Squeezy", external: true },
+    ];
+
+    const profileLinks = [
+        { to: "/profile", label: "Profile", external: false },
+        { to: "/settings", label: "Settings", external: false, bottomHr: true },
+        { to: "/auth?signout=1", label: "Sign Out", external: false },
     ];
 
     const navClasses = 'text-white p-3 rounded-lg border border-transparent hover:bg-zinc-950/50 hover:border-zinc-900';
@@ -120,7 +132,7 @@ function Header() {
                                         {link.label}
                                     </a>
                                 ) : (
-                                    <Link to={link.to} onClick={toggleMobileMenu} className="block text-white px-4 py-3 border-t border-zinc-800 hover:bg-zinc-700/50">
+                                    <Link to={link.to} onClick={toggleMobileMenu} className={`block text-white px-4 py-3 border-t border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""}`}>
                                         {link.label}
                                     </Link>
                                 )}
@@ -132,11 +144,28 @@ function Header() {
 
             {/* Profile dropdown */}
             {profileMenu && (
-                <div id="profile-menu" className={`fixed flex flex-col p-0 bg-zinc-900 text-white rounded-3xl shadow-lg shadow-black/20 border border-zinc-800 z-50 ${isFloating ? 'top-26 right-8' : 'top-16 right-2'}`}>
-                    <Link to="/profile" className="hover:bg-zinc-800/20 p-5 py-2 rounded-t-3xl" onClick={toggleProfileMenu}>Profile</Link>
-                    <Link to="/settings" className="hover:bg-zinc-800/20 p-5 py-2" onClick={toggleProfileMenu}>Settings</Link>
-                    <hr className="border-zinc-700" />
-                    <a href="/auth?signout=1" className="hover:bg-zinc-800/20 p-5 py-2 rounded-b-3xl">Sign Out</a>
+                <div id="profile-menu" className={`bg-zinc-900 border-zinc-800 md:rounded-b-3xl md:fixed md:flex md:flex-col md:p-0 md:bg-zinc-900 text-white rounded-3xl md:shadow-lg md:shadow-black/20 md:border md:border-zinc-800 z-50 ${isFloating ? 'md:top-26 md:right-8' : 'md:top-16 md:right-2'}`}>
+                    <ul className="flex flex-col">
+                        {profileLinks.map((link) => (
+                            <li key={link.label} className="">
+                                {link.external ? (
+                                    <a
+                                        href={link.to}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""}`}
+                                    >
+                                        {link.label}
+                                    </a>
+                                ) : (
+                                    <Link to={link.to} onClick={toggleProfileMenu} className={`block text-white px-4 py-3 border-t md:border-0 border-zinc-800 hover:bg-zinc-700/50 ${profileLinks[profileLinks.length - 1].label === link.label ? "rounded-b-3xl" : ""}`}>
+                                        {link.label}
+                                    </Link>
+                                )}
+                                {link.bottomHr && <hr className="border-zinc-800" />}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             )}
         </header>
