@@ -54,15 +54,13 @@ function Header() {
         { to: "https://marakusa.lemonsqueezy.com", label: "Lemon Squeezy", external: true },
     ];
 
-    const navClasses = isFloating ?
-        'text-white p-3 rounded-lg border border-transparent hover:bg-zinc-950/50 hover:border-zinc-900' :
-        'text-white p-3 rounded-lg border border-transparent hover:bg-zinc-900';
+    const navClasses = 'text-white p-3 rounded-lg border border-transparent hover:bg-zinc-950/50 hover:border-zinc-900';
 
     return (
         <header className={
-            `transition-all duration-300 fixed z-50 ${isFloating ? 'top-8 left-8 right-8 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-xl shadow-black/20' : 'top-4 left-8 right-8 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-xl shadow-black/20'}`
+            `transition-all duration-300 fixed z-50 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-xl shadow-black/20 ${isFloating ? 'top-8 left-8 right-8' : 'top-4 left-8 right-8'}`
         }>
-            <div className="flex items-center justify-between px-4 py-2">
+            <div className="flex items-center justify-between pl-6 p-2">
                 <div className="font-[Boldonse] text-lg text-blue-200 select-none">NAALI</div>
 
                 {/* Desktop nav */}
