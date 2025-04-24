@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useProfile } from "./ProfileContext";
 import { useEffect, useState } from "react";
 
@@ -12,6 +12,8 @@ function Header() {
         auth_method: string;
     }
 
+    const navigate = useNavigate();
+    
     const { profile, fetchProfile } = useProfile();
     const [profileMenu, setProfileMenu] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
@@ -72,7 +74,7 @@ function Header() {
             `transition-all duration-300 fixed z-50 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-xl shadow-black/20 ${isFloating ? 'top-8 left-8 right-8' : 'top-4 left-8 right-8'}`
         }>
             <div className="flex items-center justify-between pl-6 p-2">
-                <div className="font-[Boldonse] text-lg text-blue-200 select-none">NAALI</div>
+                <div onClick={() => navigate("/")} className="font-[Boldonse] text-lg text-blue-200 select-none cursor-pointer">NAALI</div>
 
                 {/* Desktop nav */}
                 <nav className="hidden md:flex flex-grow justify-center gap-2">
