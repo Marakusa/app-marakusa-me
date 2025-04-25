@@ -302,7 +302,7 @@ function Library({ archived }: LibraryProps) {
                     <p>{downloadError}</p>
                 </div>
             )}
-            <div className="w-full flex flex-col gap-8 justify-center items-center my-32 select-none">
+            <div className="w-full flex flex-col gap-8 justify-center items-center mt-32 select-none px-10">
                 {!archived && !currentProductId && (
                     <div className="w-full flex flex-col justify-center items-center bg-gradient-to-tr from-purple-400/90 to-blue-300/90 text-blue-950 font-bold rounded-3xl shadow-lg shadow-black/20 p-8">
                         <h3>Official stores</h3>
@@ -315,7 +315,7 @@ function Library({ archived }: LibraryProps) {
                     </div>
                 )}
                 <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-start">
-                    <div className="md:w-100 flex flex-col gap-8 justify-center items-center">
+                    <div className="md:w-100 flex flex-col gap-8 justify-center items-center mx-auto">
                         <div className="w-full flex flex-col gap-4 justify-center items-center bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 px-6 py-8">
                             {!archived ? (
                                 <>
