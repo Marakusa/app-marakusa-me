@@ -302,7 +302,7 @@ function Library({ archived }: LibraryProps) {
                     <p>{downloadError}</p>
                 </div>
             )}
-            <div className="w-full flex flex-col gap-8 justify-center items-center my-32 select-none">
+            <div className="w-full flex flex-col gap-8 justify-center mt-32 items-center select-none">
                 {!archived && !currentProductId && (
                     <div className="w-full flex flex-col justify-center items-center bg-gradient-to-tr from-purple-400/90 to-blue-300/90 text-blue-950 font-bold rounded-3xl shadow-lg shadow-black/20 p-8">
                         <h3>Official stores</h3>
@@ -315,7 +315,7 @@ function Library({ archived }: LibraryProps) {
                     </div>
                 )}
                 <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-start">
-                    <div className="md:w-100 flex flex-col gap-8 justify-center items-center">
+                    <div className="md:w-100 flex flex-col gap-8 justify-center items-center mx-auto">
                         <div className="w-full flex flex-col gap-4 justify-center items-center bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 px-6 py-8">
                             {!archived ? (
                                 <>
@@ -343,12 +343,18 @@ function Library({ archived }: LibraryProps) {
 
                                             <hr className="w-11/12 my-2 m-auto border-zinc-600"></hr>
 
-                                            {localStorage.getItem("auth") && localStorage.getItem("token") ? (<div onClick={() => {navigate("/"), scrollToId("unityFiles")}} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
+                                            {localStorage.getItem("auth") && localStorage.getItem("token") ? (<div onClick={() => {navigate("/"); setTimeout(() =>  scrollToId("unityFiles"), 0)}} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
                                                 <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
                                             </div>) : (<div className="flex flex-row gap-3 text-sm text-zinc-500 px-3 py-2 rounded-full transition-colors w-full">
                                                 <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
                                             </div>)}
-                                            <div onClick={() => {navigate("/"), scrollToId("sppFiles")}} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
+                                            <div
+                                                onClick={() => {
+                                                    navigate("/");
+                                                    setTimeout(() => scrollToId("sppFiles"), 0);
+                                                }}
+                                                className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full"
+                                            >
                                                 <FaPaintBrush className="w-5 h-5 min-w-5" /> Texturing
                                             </div>
                                             <div onClick={() => navigate("/resources")} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
@@ -453,9 +459,16 @@ function Library({ archived }: LibraryProps) {
                                     <p>These are the latest versions of the packages. View products files by clicking them.</p>
                                     <div className="flex flex-col xl:grid xl:grid-cols-2 gap-8 text-left">
                                         {privateFiles.products.map(product => (
-                                            <div key={product.id} onClick={() => {scrollToId("top"), 
-                                            // Set timeout because sometimes the page doesn't scroll to the top
-                                            setTimeout(() => {navigate("/product/" + product.id)}, 50)}} className="flex flex-col gap-4 text-left cursor-pointer hover:-translate-y-0.5 transition-transform">
+                                            <div
+                                            key={product.id}
+                                            onClick={() => {
+                                                scrollToId("top"); // Scroll to the top
+                                                setTimeout(() => {
+                                                    navigate("/product/" + product.id); // Navigate after a short delay
+                                                }, 50);
+                                            }}
+                                            className="flex flex-col gap-4 text-left cursor-pointer hover:-translate-y-0.5 transition-transform"
+                                            >
                                                 {product.thumbnail && (
                                                     <div
                                                         style={{ backgroundImage: `url(${cdnPath + product.thumbnail})` }}
