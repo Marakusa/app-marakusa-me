@@ -3,9 +3,11 @@ import React from 'react';
 const TermsOfService: React.FC = () => {
     return (
         <div>
-            <div className="max-w-3xl mx-auto p-5 my-27">
-                <div className="bg-zinc-900 text-white w-full rounded-3xl shadow-lg shadow-black/20 p-5 text-left">
+            <div className="md:max-w-4xl mx-auto py-5 md:px-5 my-27">
+                <div className="bg-zinc-900 text-white w-full sm:rounded-3xl shadow-lg shadow-black/20 p-8 md:px-16 md:pb-16 text-left">
+
                     <h2 className="text-2xl text-center font-bold mb-4">Terms of Service</h2>
+
                     <h3 className="text-xl font-semibold mt-6">You May:</h3>
                     <ul className="list-disc list-inside m-4">
                         <li>Use the avatar in VRChat, Resonite, or similar compatible platforms.</li>
