@@ -302,7 +302,7 @@ function Library({ archived }: LibraryProps) {
                     <p>{downloadError}</p>
                 </div>
             )}
-            <div className="w-full flex flex-col gap-8 justify-center items-center my-32 select-none">
+            <div className="mx-8 md:mx-auto md:w-full flex flex-col gap-8 justify-center items-center my-32 select-none">
                 {!archived && !currentProductId && (
                     <div className="w-full flex flex-col justify-center items-center bg-gradient-to-tr from-purple-400/90 to-blue-300/90 text-blue-950 font-bold rounded-3xl shadow-lg shadow-black/20 p-8">
                         <h3>Official stores</h3>
@@ -315,7 +315,7 @@ function Library({ archived }: LibraryProps) {
                     </div>
                 )}
                 <div className="w-full flex flex-col md:flex-row gap-8 justify-center items-start">
-                    <div className="md:w-100 flex flex-col gap-8 justify-center items-center">
+                    <div className="w-full md:w-100 flex flex-col gap-8 justify-center items-center">
                         <div className="w-full flex flex-col gap-4 justify-center items-center bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 px-6 py-8">
                             {!archived ? (
                                 <>
@@ -400,7 +400,7 @@ function Library({ archived }: LibraryProps) {
                             <div className="flex gap-3 items-center"><p className="text-3xl flex gap-3"><SiAdobe className="mt-[2px]" /> Substance Painter files</p><span className="bg-green-500 text-green-900 text-lg font-black px-3 py-0 rounded-full">FREE</span></div>
                             <p>These files are free to use if you do commissions, or if you just want to make textures before purchase.</p>
                             <p className="flex gap-2">The Naali's <Link to="/tos" target="_blank" className="text-blue-400 hover:underline flex items-center gap-1 font-bold"><FaLink className="w-5 h-5 min-w-5" /> Terms of Service</Link> apply.</p>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3">
                                 {currentPublicDirectory.length > 0 && (
                                     <div
                                         key=".."
@@ -487,7 +487,7 @@ function Library({ archived }: LibraryProps) {
                                                         className="bg-cover bg-no-repeat bg-center w-full h-40 rounded-2xl border border-zinc-700/30 shadow-lg shadow-black/20"></div>)}
                                                     <p className="text-3xl flex gap-3">{product.name ?? product.id}</p>
                                                     {product.description && <p>{product.description}</p>}
-                                                    <div className="grid grid-cols-2 gap-3">
+                                                    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3">
                                                         {product.currentDirectory.length > 0 && (
                                                             <div
                                                                 key=".."
@@ -554,7 +554,7 @@ function Library({ archived }: LibraryProps) {
                                                                 const filePattern = new RegExp(contentItem.content);
                                                                 const matchingFiles = product.files.filter(file => filePattern.test(file.name));
                                                                 return (
-                                                                    <div key={index} className="grid grid-cols-2 gap-3">
+                                                                    <div key={index} className="flex flex-col lg:grid lg:grid-cols-2 gap-3">
                                                                         {matchingFiles.reverse().map(file => (
                                                                             <div
                                                                                 key={file.id}
@@ -589,7 +589,7 @@ function Library({ archived }: LibraryProps) {
                             ) : (
                                 <div className="flex flex-col gap-8 text-left bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8">
                                     <div className="text-3xl w-50 h-10 bg-zinc-700 rounded-3xl animate-pulse"></div>
-                                    <div className="grid grid-cols-2 gap-3">
+                                    <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3">
                                         {Array.from({ length: 4 }).map((_, index) => (
                                             <div key={index} className="flex flex-row gap-3 justify-between items-center bg-zinc-800 text-white p-3 rounded-3xl shadow-lg shadow-black/20 animate-pulse">
                                                 <div className="w-10 h-10 min-w-10 bg-zinc-700 rounded"></div>
