@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
-import { apiPath } from "../public.config.json";
+import { AuthDiscordType, useApi } from '../ApiContext';
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../ProfileContext";
 
 function Auth() {
     const navigate = useNavigate();
-    const { fetchProfile } = useProfile();
+    const { api } = useApi();
+    const { signOut } = useProfile();
 
-    const [auth, setAuth] = useState({
+    const [auth, setAuth] = useState<{
+        authenticated: boolean;
+        error: string | null;
+    }>({
         authenticated: false,
         error: null
     });
@@ -19,154 +23,37 @@ function Auth() {
         const signout = urlParams.get("signout");
 
         if (signout) {
-            // Send the code and state to the server
-            fetch(apiPath + "/api/v1/auth/discord", {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    auth: localStorage.getItem("auth"),
-                    token: localStorage.getItem("token")
-                })
-            })
-                .then((response) => response.json())
-                    .then((data) => {
-                        if (data.error) {
-                            setAuth({
-                                authenticated: false,
-                                error: data.error
-                            });
-                            fetchProfile();
-                            return;
-                        }
-    
-                        localStorage.removeItem("auth");
-                        localStorage.removeItem("token");
+            signOut();
+            navigate("/");
+            return;
+        }
+
+        if (!auth.error && !auth.authenticated && ((!localStorage.getItem("auth") && !localStorage.getItem("token")) || (code && state))) {
+            api.authenticateDiscord(code, state)
+                .then((data) => {
+                    if (data.error) {
                         setAuth({
                             authenticated: false,
-                            error: null
+                            error: data.error
                         });
-                        fetchProfile();
-                        navigate("/");
-                    });
-            return;
-        }
-        
-        if (!auth.error && !auth.authenticated && ((!localStorage.getItem("auth") && !localStorage.getItem("token")) || (code && state))) {
-            var url = "/api/v1/auth/discord";
+                        return;
+                    }
 
-            // Send the code and state to the server
-            fetch(apiPath + url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    code: code,
-                    state: state
-                })
-            })
-                .then((response) => response.json())
-                    .then((data) => {
-                        if (data.error) {
-                            setAuth({
-                                authenticated: false,
-                                error: data.error
-                            });
-                            fetchProfile();
-                            return;
-                        }
-
-                        // Save the token to the local storage
-                        localStorage.setItem("auth", data.auth);
-                        localStorage.setItem("token", data.token);
-                        // Redirect to the library
-                        setAuth({
-                            authenticated: true,
-                            error: null
-                        });
-                        fetchProfile();
-                        navigate("/");
+                    // Save the token to the local storage
+                    localStorage.setItem("auth", (data.data as AuthDiscordType).auth ?? "");
+                    localStorage.setItem("token", (data.data as AuthDiscordType).token ?? "");
+                    
+                    // Redirect to the library
+                    setAuth({
+                        authenticated: true,
+                        error: null
                     });
+                    navigate("/");
+                });
             return;
         }
 
-        // Fetch profile data once
-        fetch(apiPath + "/api/v1/profile/discord", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                auth: localStorage.getItem("auth"),
-                token: localStorage.getItem("token"),
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.error) {
-                    console.error(data.error);
-                    return;
-                } else {
-                    if ((data.profile as any).userId !== null) {
-                        const auth = localStorage.getItem("auth");
-                        const token = localStorage.getItem("token");
-                
-                        if (!auth || !token) {
-                            console.error("No auth or token found");
-                            return;
-                        } else {
-                            if (data.profile) {
-                                if ((data.profile as any).discord_id !== null) {
-                                    console.log("Already connected to Discord");
-                                    navigate("/");
-                                }
-                                else {
-                                    console.log("Not connected to Discord");
-                                    fetch(apiPath + "/api/v1/connect/discord", {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json"
-                                        },
-                                        body: JSON.stringify({
-                                            auth: localStorage.getItem("auth"),
-                                            token: localStorage.getItem("token"),
-                                            code: code,
-                                            state: state
-                                        })
-                                    })
-                                        .then((response) => response.json())
-                                            .then((data) => {
-                                                if (data.error) {
-                                                    setAuth({
-                                                        authenticated: false,
-                                                        error: data.error
-                                                    });
-                                                    fetchProfile();
-                                                    return;
-                                                }
-            
-                                                setAuth({
-                                                    authenticated: true,
-                                                    error: null
-                                                });
-                                                fetchProfile();
-                                                navigate("/settings");
-                                            });
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        navigate("/");
-                    }
-                }
-            })
-            .catch(() => {
-                console.error("Failed to fetch profile");
-                return;
-            });
+        navigate("/");
     }, []);
 
     return (

@@ -3,24 +3,11 @@ import { useProfile } from "./ProfileContext";
 import { useEffect, useState } from "react";
 
 function Header() {
-    interface Profile {
-        userId: string;
-        username: string;
-        avatar: string;
-        discord_id?: string;
-        gumroad_id?: string;
-        auth_method: string;
-    }
-
     const navigate = useNavigate();
-    
-    const { profile, fetchProfile } = useProfile();
+
+    const { getSessionProfile } = useProfile();
     const [profileMenu, setProfileMenu] = useState(false);
     const [mobileMenu, setMobileMenu] = useState(false);
-
-    if (profile.fetched === false) {
-        fetchProfile();
-    }
 
     const toggleProfileMenu = () => {
         setMobileMenu(false);
@@ -92,20 +79,22 @@ function Header() {
                 {/* Profile & Burger wrapper */}
                 <div className="flex items-center gap-2">
                     {/* Profile button */}
-                    {profile.fetched ? (
-                        profile.data ? (
+                    {getSessionProfile().fetched ? (
+                        getSessionProfile().data ? (
                             <div id="profile-button" onClick={toggleProfileMenu} className="flex items-center cursor-pointer select-none p-2 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
                                 <img src={
-                                    (profile.data as Profile).avatar.startsWith("https://") || (profile.data as Profile).avatar.startsWith("/")
-                                        ? (profile.data as Profile).avatar
-                                        : `https://cdn.discordapp.com/avatars/${(profile.data as Profile).discord_id}/${(profile.data as Profile).avatar}.png`
+                                    getSessionProfile().data?.avatar.startsWith("https://") || getSessionProfile().data?.avatar.startsWith("/")
+                                        ? getSessionProfile().data?.avatar
+                                        : `https://cdn.discordapp.com/avatars/${getSessionProfile().data?.discord_id}/${getSessionProfile().data?.avatar}.png`
                                 } alt="Avatar" className="w-8 h-8 rounded-full" />
-                                <p className="text-white ml-3 hidden lg:block">{(profile.data as Profile).username}</p>
+                                <p className="text-white ml-3 hidden lg:block">{getSessionProfile().data?.username}</p>
                             </div>
                         ) : (
                             <Link to="/signin" className="text-white p-3 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">Sign In</Link>
                         )
-                    ) : null}
+                    ) : (
+                       null
+                    )}
 
                     {/* Mobile burger */}
                     <button onClick={toggleMobileMenu} className="md:hidden p-3 rounded-2xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">

@@ -1,34 +1,43 @@
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../ProfileContext";
+import { useEffect, useState } from "react";
 
 function Profile() {
     const navigate = useNavigate();
-    const { profile, fetchProfile } = useProfile();
+    const { getSessionProfile, isSignedIn } = useProfile();
 
-    if (profile.fetched === false) {
-        fetchProfile();
+    const [ render, setRender ] = useState(false);
+
+    useEffect(() => {
+        isSignedIn().then((signedIn) => {
+            if (!signedIn) {
+                navigate("/");
+                return;
+            }
+
+            setRender(true);
+        });
+    }, []);
+
+    if (!render) {
+        return (<></>);
     }
-
-    if (profile.fetched && !profile.data) {
-        navigate("/signin");
-        return;
-    }
-
+    
     return (
         <>
             <title>Naali - Profile</title>
 
             <div className="flex flex-col items-center justify-center h-screen">
-                {profile.fetched && profile.data && (
+                {getSessionProfile().fetched && getSessionProfile().data && (
                     <>
-                        <h3 className="text-4xl font-bold mb-4">Hello, {(profile.data as any).username}!</h3>
-                        {profile.fetched ? profile.data ? (
+                        <h3 className="text-4xl font-bold mb-4">Hello, {getSessionProfile().data?.username}!</h3>
+                        {getSessionProfile().fetched ? getSessionProfile().data ? (
                             <>
                                 <img src={
-                                    (profile.data as any).avatar.startsWith("https://") ?
-                                        (profile.data as any).avatar :
-                                        `https://cdn.discordapp.com/avatars/${(profile.data as any).discord_id}/${(profile.data as any).avatar}.png`} alt="Avatar" className="w-32 h-32 rounded-full mb-4" />
-                                <p className="text-lg">{(profile.data as any).username}</p>
+                                    getSessionProfile().data?.avatar.startsWith("https://") ?
+                                        getSessionProfile().data?.avatar :
+                                        `https://cdn.discordapp.com/avatars/${getSessionProfile().data?.discord_id}/${getSessionProfile().data?.avatar}.png`} alt="Avatar" className="w-32 h-32 rounded-full mb-4" />
+                                <p className="text-lg">{getSessionProfile().data?.username}</p>
                             </>
                         ) : (
                             <p className="text-lg">No profile data available.</p>
