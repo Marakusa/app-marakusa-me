@@ -8,7 +8,7 @@ function SignIn() {
     const { isSignedIn } = useProfile();
     const navigate = useNavigate();
 
-    const [ render, setRender ] = useState(false);
+    const [render, setRender] = useState(false);
 
     // If profile is already fetched and contains data, navigate to library
     useEffect(() => {
@@ -30,7 +30,7 @@ function SignIn() {
         <>
             <title>Naali - Sign In</title>
 
-            <div className="flex flex-col gap-8 justify-center items-center md:w-150 mx-5 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-lg shadow-black/20 p-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="flex flex-col gap-8 justify-center items-center w-10/12 max-w-150 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-lg shadow-black/20 p-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                 <div className="text-3xl">Sign In</div>
                 <p>If you want to access all of the files, you have to connect your Discord account to link your avatar licenses.</p>
                 <p>Your licenses here are synced with <a href="https://discord.com/invite/47SrTE3Spw" target="_blank" className="text-blue-400">Mara's Frosty Lodge</a> Discord server.</p>
