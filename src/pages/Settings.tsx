@@ -1,4 +1,4 @@
-import { apiPath, discordClientId, discordRedirectUri } from "../public.config.json";
+import { discordClientId, discordRedirectUri } from "../public.config.json";
 import { CiCircleCheck, CiCircleRemove } from "react-icons/ci";
 import { useProfile } from "../ProfileContext";
 import { useNavigate } from "react-router-dom";
@@ -6,46 +6,40 @@ import { useEffect, useState } from "react";
 import { FaDesktop, FaMobile, FaTablet, FaTv, FaQuestion } from "react-icons/fa";
 import { GiConsoleController } from "react-icons/gi";
 import { BiSolidWatchAlt } from "react-icons/bi";
+import { useApi } from "../ApiContext";
 
 function Settings() {
     const navigate = useNavigate();
-    const { profile, fetchProfile } = useProfile();
+    const { api } = useApi();
+    const { getSessionProfile, isSignedIn, signOut } = useProfile();
     const [showConfirmDisconnect, setShowConfirmDisconnect] = useState<string | null>(null);
     const [sessions, setSessions] = useState<any[]>([]);
 
-    if (profile.fetched === false) {
-        fetchProfile();
-    }
+    const [render, setRender] = useState(false);
 
     function confirmDisconnect(platform: string) {
         setShowConfirmDisconnect(platform);
     }
 
     async function disconnectConnection(platform: string) {
-        // Fetch disconnect API
-        const response = await fetch(apiPath + `/api/v1/disconnect/${platform}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                auth: localStorage.getItem("auth"),
-                token: localStorage.getItem("token")
-            })
+        api.disconnectDiscord(
+            localStorage.getItem("auth"),
+            localStorage.getItem("token"),
+        ).then((response) => {
+            if (response.error) {
+                console.error(response.error);
+                return;
+            }
+
+            setSessions((prevSessions) => {
+                return prevSessions.filter((session) => session.id !== platform);
+            });
+        }
+        ).catch((error) => {
+            console.error(error);
         });
-        const data = await response.json();
-        if (data.error) {
-            console.error(data.error);
-            return;
-        }
-
-        if ((profile as any).auth_method === platform) {
-            window.location.href = "/auth?signout=1";
-            localStorage.removeItem("auth");
-            localStorage.removeItem("token");
-        }
-
-        fetchProfile();
+        signOut();
+        navigate("/");
     }
 
     async function connectConnection(platform: string) {
@@ -59,35 +53,37 @@ function Settings() {
         }
     }
 
-    if (profile.fetched && !profile.data) {
-        navigate("/signin");
-        return;
-    }
-
     useEffect(() => {
+        isSignedIn().then((signedIn) => {
+            if (!signedIn) {
+                navigate("/signin");
+                return;
+            }
+
+            setRender(true);
+        });
+
         if (sessions.length === 0) {
-            fetch(apiPath + `/api/v1/sessions/list`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    auth: localStorage.getItem("auth"),
-                    token: localStorage.getItem("token")
-                })
-            }).then((response) => {
-                response.json().then((data) => {
-                    if (data.error) {
-                        console.error(data.error);
+            api.listSessions(
+                localStorage.getItem("auth"),
+                localStorage.getItem("token"))
+                .then((response) => {
+                    if (response.error) {
+                        console.error(response.error);
                         return;
                     }
-                    setSessions(data.sessions);
+                    if (response.data) {
+                        setSessions(response.data.sessions);
+                    }
+                }).catch((error) => {
+                    console.error(error);
                 });
-            }).catch((error) => {
-                console.error(error);
-            });
         }
     }, []);
+
+    if (!render) {
+        return (<></>);
+    }
 
     function getDeviceType(session: string) {
         if (!session) return <FaQuestion className="inline w-8 h-8" />;
@@ -180,26 +176,18 @@ function Settings() {
     }
 
     function signOutSession(sessionId: string) {
-        fetch(apiPath + `/api/v1/sessions/signout`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                auth: localStorage.getItem("auth"),
-                token: localStorage.getItem("token"),
-                session_id: sessionId
-            })
-        }).then((response) => {
-            response.json().then((data) => {
-                if (data.error) {
-                    console.error(data.error);
-                    return;
-                }
+        api.signOutSession(
+            localStorage.getItem("auth"),
+            localStorage.getItem("token"),
+            sessionId
+        ).then((response) => {
+            if (response.error) {
+                console.error(response.error);
+                return;
+            }
 
-                setSessions((prevSessions) => {
-                    return prevSessions.filter((session) => session.id !== sessionId);
-                });
+            setSessions((prevSessions) => {
+                return prevSessions.filter((session) => session.id !== sessionId);
             });
         }).catch((error) => {
             console.error(error);
@@ -241,7 +229,7 @@ function Settings() {
                                 <img src="/discord.svg" alt="Discord" className="w-8 h-8" draggable="false" />
                                 <p className="text-lg ml-1">Discord</p>
                             </div>
-                            {profile?.data ? (profile as any).data.discord_id ? (
+                            {getSessionProfile().data ? getSessionProfile().data?.discord_id ? (
                                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-1 items-center ml-2 text-green-400">
                                     <div className="flex flex-row gap-1 items-center">
                                         <CiCircleCheck className="inline w-5 h-5" />

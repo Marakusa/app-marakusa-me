@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { apiPath, gumroadProducts, lemonSqueezyProducts, jinxxyProducts } from "../public.config.json";
+import { gumroadProducts, lemonSqueezyProducts, jinxxyProducts } from "../public.config.json";
 import { IoMdAddCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "../ProfileContext";
+import { LicensesType, LicenseType, useApi } from '../ApiContext';
 
 function Licenses() {
     interface RedeemedState {
@@ -10,30 +11,24 @@ function Licenses() {
         redeeming: boolean;
         error: string | null;
     };
-    interface License {
-        license_id: string;
-        product_id: string;
-        license_key: string;
-        redeemed: boolean;
-        createdAt: any;
-    }
     interface LicenseList {
         fetched: boolean;
-        data: License[];
+        data: LicenseType[];
         error: string | null;
     }
     interface Stores {
         [key: string]: { [key: string]: string };
     }
 
-    const stores : Stores = {
+    const stores: Stores = {
         gumroad: gumroadProducts,
         lemonsqueezy: lemonSqueezyProducts,
         jinxxy: jinxxyProducts
     };
 
     const navigate = useNavigate();
-    const { profile, fetchProfile } = useProfile();
+    const { api } = useApi();
+    const { isSignedIn } = useProfile();
 
     const [newRedeem, setNewRedeem] = useState(false);
     const [marketPlatform, setPlatform] = useState<keyof typeof stores>("gumroad");
@@ -52,10 +47,26 @@ function Licenses() {
         }
     }, []);
 
+    /* If not signed in, go to sign in page */
+    useEffect(() => {
+        console.log("test");
+        isSignedIn().then((signedIn) => {
+            console.log(signedIn);
+            if (!signedIn) {
+                console.log("Not signed in, redirecting to sign in page...");
+                navigate("/signin");
+                return;
+            }
+
+            /* Fetch licenses */
+            if (!licenseList || (!licenseList.error && !licenseList.fetched)) {
+                fetchLicenses();
+            }
+        });
+    }, []);
+
     async function redeemLicense() {
         if (redeemed.redeeming) return;
-
-        fetchProfile();
 
         setRedeemed({
             redeemed: false,
@@ -64,27 +75,18 @@ function Licenses() {
         });
 
         try {
-            const response = await fetch(apiPath + "/api/v1/license/redeem", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    market_platform: (document.getElementById("market_platform") as HTMLSelectElement)!.value,
-                    product_id: (document.getElementById("product_id") as HTMLSelectElement)!.value,
-                    license_key: (document.getElementById("license_key") as HTMLInputElement)!.value,
-                    auth: localStorage.getItem("auth"),
-                    token: localStorage.getItem("token")
-                })
-            });
+            const response = await api.redeemLicense(
+                (document.getElementById("market_platform") as HTMLSelectElement)!.value,
+                (document.getElementById("product_id") as HTMLSelectElement)!.value,
+                (document.getElementById("license_key") as HTMLInputElement)!.value,
+                localStorage.getItem("auth"),
+                localStorage.getItem("token"));
 
-            const data = await response.json();
-
-            if (data.error) {
+            if (response.error) {
                 setRedeemed({
                     redeemed: false,
                     redeeming: false,
-                    error: data.error
+                    error: response.error
                 });
                 return;
             }
@@ -108,46 +110,26 @@ function Licenses() {
     }
 
     function fetchLicenses() {
-        fetchProfile();
-
-        fetch(apiPath + "/api/v1/license/list", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                auth: localStorage.getItem("auth"),
-                token: localStorage.getItem("token")
-            })
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.error) {
+        api.listLicenses(
+            localStorage.getItem("auth"),
+            localStorage.getItem("token")
+        )
+            .then((response) => {
+                if (response.error) {
                     setLicenseList({
                         fetched: true,
                         data: [],
-                        error: data.error
+                        error: response.error
                     });
                     return;
                 }
 
                 setLicenseList({
                     fetched: true,
-                    data: data.licenses,
+                    data: (response.data as LicensesType).licenses ?? [],
                     error: null
                 });
             });
-    }
-
-    /* Fetch licenses */
-    if (!licenseList || (!licenseList.error && !licenseList.fetched)) {
-        fetchLicenses();
-    }
-
-    /* If not signed in, go to sign in page */
-    if (profile.fetched && !profile.data) {
-        navigate("/signin");
-        return;
     }
 
     /* Convert past date to a readable format i.e. 10 minutes ago */
@@ -203,7 +185,7 @@ function Licenses() {
                         <div className="flex flex-col p-4 gap-3">
 
                             <p className="text-left px-2">Redeem a purchased product below. <span onClick={() => navigate("/tutorial/redeem")} className="text-blue-400 hover:underline font-bold cursor-pointer">How do I redeem my purchase?</span></p>
-                            
+
                             <div className="flex flex-row gap-3">
                                 {/* Marketplaces */}
                                 <select id="market_platform" onChange={(event) => setPlatform(event.target.value)} className="p-2 px-4 w-full rounded-full bg-zinc-950">
@@ -257,7 +239,7 @@ function Licenses() {
                                 </tr>
                             ) : licenseList && licenseList.fetched ? (
                                 licenseList.data && licenseList.data.length > 0 ? (
-                                    licenseList.data.map((license: License) => (
+                                    licenseList.data.map((license: LicenseType) => (
                                         <tr key={license.license_key}>
                                             <td className="p-2 px-4">
                                                 {license.product_id.split(',').map((id) => (

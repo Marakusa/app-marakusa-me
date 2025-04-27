@@ -14,31 +14,37 @@ import TermsOfService from "./pages/TermsOfService";
 import RedeemTutorial from "./pages/RedeemTutorial";
 import Docs from "./pages/Docs";
 import Faq from "./pages/Faq";
+import { SessionProvider } from "./SessionContext";
+import { ApiProvider } from "./ApiContext";
 
 export default function App() {
   return (
     <>
       <meta name="title" content="Naali - Marakusa" />
 
-      <ProfileProvider>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Library />} />
-          <Route path="/licenses" element={<Licenses />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/archived" element={<Library archived />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/tos" element={<TermsOfService />} />
-          <Route path="/product/:currentProductId" element={<Library />} />
-          <Route path="/tutorial/redeem" element={<RedeemTutorial />} />
-          <Route path="/docs" element={<Docs />} />
-          <Route path="/docs/faq" element={<Faq />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ProfileProvider>
+      <ApiProvider>
+        <SessionProvider>
+          <ProfileProvider>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Library />} />
+              <Route path="/licenses" element={<Licenses />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/archived" element={<Library archived />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/tos" element={<TermsOfService />} />
+              <Route path="/product/:currentProductId" element={<Library />} />
+              <Route path="/tutorial/redeem" element={<RedeemTutorial />} />
+              <Route path="/docs" element={<Docs />} />
+              <Route path="/docs/faq" element={<Faq />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ProfileProvider>
+        </SessionProvider>
+      </ApiProvider>
     </>
   );
 }
