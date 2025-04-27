@@ -11,6 +11,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { FaAngleLeft, FaFileZipper, FaKey, FaLink, FaScroll, FaUnity } from "react-icons/fa6";
 import { FaArchive, FaPaintBrush } from "react-icons/fa";
 import { useProfile } from "../ProfileContext";
+import { IoDocumentText } from "react-icons/io5";
 
 function formatFileSize(size: number) {
     if (size >= 1073741824) {
@@ -343,25 +344,40 @@ function Library({ archived }: LibraryProps) {
 
                                                 <hr className="w-11/12 my-2 m-auto border-zinc-600"></hr>
 
-                                                {localStorage.getItem("auth") && localStorage.getItem("token") ? (<div onClick={() => { navigate("/"), scrollToId("unityFiles") }} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
-                                                    <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
-                                                </div>) : (<div className="flex flex-row gap-3 text-sm text-zinc-500 px-3 py-2 rounded-full transition-colors w-full">
-                                                    <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
-                                                </div>)}
-                                                <div onClick={() => { navigate("/"), scrollToId("sppFiles") }} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
+                                                {localStorage.getItem("auth") && localStorage.getItem("token") ? (
+                                                    <div
+                                                        onClick={() => {
+                                                            navigate("/");
+                                                            setTimeout(() => scrollToId("unityFiles"), 0);
+                                                        }}
+                                                        className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
+                                                        <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
+                                                    </div>) : (<div className="flex flex-row gap-3 text-sm text-zinc-500 px-3 py-2 rounded-full transition-colors w-full">
+                                                        <FaUnity className="w-5 h-5 min-w-5" /> Latest packages
+                                                    </div>)}
+                                                <div
+                                                    onClick={() => {
+                                                        navigate("/");
+                                                        setTimeout(() => scrollToId("sppFiles"), 0);
+                                                    }}
+                                                    className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
                                                     <FaPaintBrush className="w-5 h-5 min-w-5" /> Texturing
                                                 </div>
                                                 <div onClick={() => navigate("/resources")} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
                                                     <BiSolidCollection className="w-5 h-5 min-w-5" /> Resources
                                                 </div>
 
-                                                <hr className="w-11/12 my-2 m-auto border-zinc-600"></hr>
-
                                                 {localStorage.getItem("auth") && localStorage.getItem("token") ? (<div onClick={() => navigate("/archived")} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
                                                     <FaArchive className="w-5 h-5 min-w-5" /> Archived
                                                 </div>) : (<div className="flex flex-row gap-3 text-sm text-zinc-500 px-3 py-2 rounded-full transition-colors w-full">
                                                     <FaArchive className="w-5 h-5 min-w-5" /> Archived
                                                 </div>)}
+
+                                                <hr className="w-11/12 my-2 m-auto border-zinc-600"></hr>
+
+                                                <div onClick={() => navigate("/docs")} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
+                                                    <IoDocumentText className="w-5 h-5 min-w-5" /> Documentation
+                                                </div>
 
                                                 <div onClick={() => navigate("/tos")} className="flex flex-row gap-3 text-sm text-zinc-300 px-3 py-2 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full">
                                                     <FaScroll className="w-5 h-5 min-w-5" /> Terms of Service
@@ -454,9 +470,10 @@ function Library({ archived }: LibraryProps) {
                                     <div className="flex flex-col xl:grid xl:grid-cols-2 gap-8 text-left">
                                         {privateFiles.products.map(product => (
                                             <div key={product.id} onClick={() => {
-                                                scrollToId("top"),
-                                                    // Set timeout because sometimes the page doesn't scroll to the top
-                                                    setTimeout(() => { navigate("/product/" + product.id) }, 50)
+                                                scrollToId("top"); // Scroll to the top
+                                                setTimeout(() => {
+                                                    navigate("/product/" + product.id); // Navigate after a short delay
+                                                }, 50);
                                             }} className="flex flex-col gap-4 text-left cursor-pointer hover:-translate-y-0.5 transition-transform">
                                                 {product.thumbnail && (
                                                     <div
