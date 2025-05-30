@@ -75,6 +75,12 @@ export interface DownloadTokenType {
     downloadUrl: string;
 }
 
+export interface ToolTokenType {
+    code: string;
+    id: string;
+    expiresAt: string;
+}
+
 interface ApiContextType {
     api: {
         authenticateDiscord: (code: string | null, state: string | null) => Promise<ApiResponseType<AuthDiscordType>>;
@@ -85,6 +91,7 @@ interface ApiContextType {
         listSessions: (auth: string | null, token: string | null) => Promise<ApiResponseType<SessionListType>>;
         signOutSession: (auth: string | null, token: string | null, session_id: string | null) => Promise<ApiResponseType<any>>;
         generateDownloadToken: (product: string | null, file: string | null, archived: boolean, auth: string | null, token: string | null) => Promise<ApiResponseType<DownloadTokenType>>;
+        generateToolToken: (auth: string | null, token: string | null) => Promise<ApiResponseType<ToolTokenType>>;
     };
 }
 
@@ -238,6 +245,24 @@ const ApiProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                         auth,
                         token,
                     }),
+                });
+                const data = await response.json();
+                if (!response.ok) {
+                    return { error: data.error || "Unknown error" };
+                }
+                return { error: null, data: data };
+            } catch (error) {
+                return { error: error instanceof Error ? error.message : "Unknown error" };
+            }
+        },
+        generateToolToken: async (auth: string | null, token: string | null) => {
+            try {
+                const response = await fetch(`${apiPath}/api/v1/tool/authorize`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ auth, token }),
                 });
                 const data = await response.json();
                 if (!response.ok) {

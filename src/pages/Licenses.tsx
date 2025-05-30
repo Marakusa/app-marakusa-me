@@ -205,7 +205,7 @@ function Licenses() {
                             <input id="license_key" type="text" placeholder="License Key" className="p-2 px-4 w-full rounded-full bg-zinc-950" />
                             <div onClick={() => { redeemLicense(); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full select-none">
                                 {redeemed.redeeming ? (
-                                    <div className="animate-spin rounded-full border-2 border-black border-t-transparent w-6 h-6"></div>
+                                    <div className="animate-spin rounded-full border-2 border-white border-t-transparent w-6 h-6"></div>
                                 ) : (
                                     <p>Redeem</p>
                                 )}

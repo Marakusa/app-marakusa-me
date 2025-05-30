@@ -8,7 +8,7 @@ import { FiArrowUpLeft } from "react-icons/fi";
 import { JSX, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { FaAngleLeft, FaFileZipper, FaKey, FaLink, FaScroll, FaUnity } from "react-icons/fa6";
+import { FaAngleLeft, FaDownload, FaFileZipper, FaKey, FaLink, FaScroll, FaUnity } from "react-icons/fa6";
 import { FaArchive, FaPaintBrush } from "react-icons/fa";
 import { useProfile } from "../ProfileContext";
 import { IoDocumentText } from "react-icons/io5";
@@ -63,6 +63,12 @@ interface FileFetch {
     error: string | null;
     files: File[];
 }
+interface ToolCodeState {
+    generated: boolean;
+    generating: boolean;
+    code: string | null;
+    error: string | null;
+};
 
 function Library({ archived }: LibraryProps) {
     const { currentProductId } = useParams<{ currentProductId: string }>();
@@ -84,6 +90,13 @@ function Library({ archived }: LibraryProps) {
     });
     const [currentPublicDirectory, setCurrentPublicDirectory] = useState<string[]>([]);
 
+    const [toolCode, setToolCode] = useState<ToolCodeState>({
+        generated: false,
+        generating: false,
+        code: null,
+        error: null
+    });
+
     function downloadFile(file: string, productId: string) {
         api.generateDownloadToken(productId, file, archived ?? false, localStorage.getItem("auth"), localStorage.getItem("token"))
             .then(async (response) => {
@@ -101,6 +114,72 @@ function Library({ archived }: LibraryProps) {
                 }
             });
     }
+
+    function fetchToolCode() {
+        if (!localStorage.getItem("auth") || !localStorage.getItem("token")) {
+            setToolCode({
+                generated: false,
+                generating: false,
+                code: null,
+                error: "You must be signed in to generate a tool code."
+            });
+            return;
+        }
+
+        if (toolCode.generating) {
+            console.warn("Tool code generation is already in progress.");
+            return;
+        }
+
+        setToolCode({
+            generated: false,
+            generating: true,
+            code: null,
+            error: null
+        });
+        
+        api.generateToolToken(localStorage.getItem("auth"), localStorage.getItem("token"))
+            .then((response) => {
+                if (response.error) {
+                    setToolCode({
+                        generated: false,
+                        generating: false,
+                        code: null,
+                        error: response.error
+                    });
+                    return;
+                }
+
+                if (!response.data?.code) {
+                    setToolCode({
+                        generated: false,
+                        generating: false,
+                        code: null,
+                        error: "No code found in the response."
+                    });
+                    return;
+                }
+
+                setToolCode({
+                    generated: true,
+                    generating: false,
+                    code: response.data.code,
+                    error: null
+                });
+
+                navigator.clipboard.writeText(response.data.code);
+            })
+            .catch((error) => {
+                console.error("Error generating tool code:", error);
+                setToolCode({
+                    generated: false,
+                    generating: false,
+                    code: null,
+                    error: "An error occurred while generating the tool code."
+                });
+            });
+    }
+
 
     if (files.fetched === false) {
         // Fetch files once from cdn /list/public
@@ -463,6 +542,25 @@ function Library({ archived }: LibraryProps) {
                         </div>)}
 
                         <div id="unityFiles" className="flex flex-col gap-8">
+                            {(privateFiles.fetched && localStorage.getItem("auth") && localStorage.getItem("token") && !currentProductId && !archived) ? (
+                                <div className="flex flex-col gap-4 text-left bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8">
+                                    <p className="text-3xl flex gap-3"><FaDownload className="mt-[2px]" /> Downloads</p>
+                                    <p>Use the tool installer to install assets and avatars to Unity projects.</p>
+
+                                    {!toolCode.generating && toolCode.error ? (<p className="text-red-400">{toolCode.error}</p>) : (toolCode.code && toolCode.generated && <>
+                                        <p>Don't share the code with anyone! The code expires in 10 minutes.</p>
+                                        <input id="tool_code" type="text" disabled placeholder="" className="p-2 px-4 w-full rounded-full bg-zinc-950" value={toolCode.code ?? ""} />
+                                        <p className="text-sm text-zinc-500">The code has been copied to your clipboard.</p>
+                                    </>)}
+                                    <div onClick={() => { fetchToolCode(); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full select-none">
+                                        {toolCode.generating ? (
+                                            <div className="animate-spin rounded-full border-2 border-white border-t-transparent w-6 h-6"></div>
+                                        ) : (
+                                            <p>Generate Code</p>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (<></>)}
 
                             {(privateFiles.fetched && localStorage.getItem("auth") && localStorage.getItem("token") && !currentProductId && !archived) ? (
                                 <div className="flex flex-col gap-4 text-left bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8">
