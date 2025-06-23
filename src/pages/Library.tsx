@@ -516,7 +516,7 @@ function Library({ archived }: LibraryProps) {
                                 )}
                                 {currentPublicDirectory.reduce((files, index) => {
                                     return files[Number(index)]?.type === "directory" ? files[Number(index)].files || [] : [];
-                                }, files.files).map((file, index) => (
+                                }, files.files).filter(file => !file.name.startsWith("MarasToolInstaller_")).map((file, index) => (
                                     <div
                                         key={file.name}
                                         className="flex flex-row gap-3 justify-between items-center bg-zinc-800 text-zinc-300 px-5 py-3 rounded-full hover:bg-zinc-800/70 transition-color cursor-pointer"
@@ -546,7 +546,43 @@ function Library({ archived }: LibraryProps) {
                                 <div className="flex flex-col gap-4 text-left bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8">
                                     <p className="text-3xl flex gap-3"><FaDownload className="mt-[2px]" /> Downloads</p>
                                     <p>Use the tool installer to install assets and avatars to Unity projects.</p>
+                                    {(() => {
+                                        // Find all files starting with MarasToolInstaller_
+                                        const toolInstallers = files.files
+                                            .filter(file => file.name.startsWith("MarasToolInstaller_"));
 
+                                        if (toolInstallers.length === 0) return null;
+
+                                        return (
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex flex-col lg:grid lg:grid-cols-2 gap-3">
+                                                    {toolInstallers.map(file => (
+                                                        <div
+                                                            key={file.id}
+                                                            className="flex flex-row gap-3 justify-between items-center bg-zinc-800 text-zinc-300 px-5 py-3 rounded-full hover:bg-zinc-800/70 transition-color cursor-pointer"
+                                                            onClick={() => window.open(cdnPath + "/public/" + file.path)}
+                                                        >
+                                                            {getFileIcon(file.type)}
+                                                            <div className="flex-1 flex-col gap-0.5">
+                                                                <p className="text-lg w-full break-all">{file.name.includes('.') ? file.name.substring(0, file.name.lastIndexOf('.')) : file.name}</p>
+                                                                <p className="text-sm text-zinc-300 uppercase">{file.name.includes('.') ? file.name.substring(file.name.lastIndexOf('.') + 1) + " • " : "file • "}{file.size !== undefined ? formatFileSize(file.size) : "???"}</p>
+                                                            </div>
+                                                            <GoDownload className="w-6 h-6 min-w-6" />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        );
+                                    })()}
+
+                                    <p>After downloading and importing the tool to Unity, you can access it from the tool bar:<br></br>
+                                    <b>Tools &gt; Mara's Tool Installer</b>
+                                    </p>
+                                    <div
+                                        className="w-136 h-30 rounded-2xl border border-zinc-700/30 shadow-lg shadow-black/20 mb-4 bg-cover bg-center"
+                                        style={{ backgroundImage: "url(/tutorial_tool_auth.jpg)" }}
+                                    ></div>
+                                    <p>When the editor plugin asks for an authentication code, you can generate one below.</p>
                                     {!toolCode.generating && toolCode.error ? (<p className="text-red-400">{toolCode.error}</p>) : (toolCode.code && toolCode.generated && <>
                                         <p>Don't share the code with anyone! The code expires in 10 minutes.</p>
                                         <input id="tool_code" type="text" disabled placeholder="" className="p-2 px-4 w-full rounded-full bg-zinc-950" value={toolCode.code ?? ""} />
