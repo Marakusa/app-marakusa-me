@@ -25,7 +25,7 @@ function Profile() {
     
     return (
         <>
-            <title>Naali - Profile</title>
+            <title>Dashboard - Profile</title>
 
             <div className="flex flex-col items-center justify-center h-screen">
                 {getSessionProfile().fetched && getSessionProfile().data && (

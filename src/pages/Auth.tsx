@@ -58,7 +58,7 @@ function Auth() {
 
     return (
         <>
-            <title>Naali - Please wait...</title>
+            <title>Dashboard - Please wait...</title>
             {auth.error ? (
                 <div>
                     <p className="text-red-400">Authentication failed. Please try again...</p>

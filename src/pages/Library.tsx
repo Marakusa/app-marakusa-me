@@ -373,7 +373,7 @@ function Library({ archived }: LibraryProps) {
 
     return (
         <>
-            <title>Naali - Library</title>
+            <title>Dashboard - Library</title>
 
             <div id="top" className="absolute top-0"></div>
             {downloadError && (

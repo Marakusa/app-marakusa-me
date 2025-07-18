@@ -167,7 +167,7 @@ function Licenses() {
 
     return (
         <>
-            <title>Naali - Licenses</title>
+            <title>Dashboard - Licenses</title>
 
             <div className="max-w-3xl mx-auto p-5 my-27">
 

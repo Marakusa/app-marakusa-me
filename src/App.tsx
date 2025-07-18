@@ -20,7 +20,7 @@ import { ApiProvider } from "./ApiContext";
 export default function App() {
   return (
     <>
-      <meta name="title" content="Naali - Marakusa" />
+      <meta name="title" content="Dashboard - Marakusa" />
 
       <ApiProvider>
         <SessionProvider>
