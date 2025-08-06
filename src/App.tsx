@@ -16,6 +16,7 @@ import Docs from "./pages/Docs";
 import Faq from "./pages/Faq";
 import { SessionProvider } from "./SessionContext";
 import { ApiProvider } from "./ApiContext";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
               <Route path="/signin" element={<SignIn />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/admin" element={<Admin />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/archived" element={<Library archived />} />
               <Route path="/resources" element={<Resources />} />

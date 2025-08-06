@@ -50,6 +50,7 @@ function Header() {
 
     const profileLinks = [
         { to: "/profile", label: "Profile", external: false },
+        { to: "/admin", label: "Admin", external: false },
         { to: "/settings", label: "Settings", external: false, bottomHr: true },
         { to: "/auth?signout=1", label: "Sign Out", external: false },
     ];
