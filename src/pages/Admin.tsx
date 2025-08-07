@@ -58,7 +58,7 @@ function Admin() {
             const auth = localStorage.getItem("auth");
             const token = localStorage.getItem("token");
 
-            const jinxxyRes = await fetch("http://localhost:5000/api/v1/sales/jinxxy", {
+            const jinxxyRes = await fetch("https://api.marakusa.me/api/v1/sales/jinxxy", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -67,7 +67,7 @@ function Admin() {
                     filter: selectedProduct.jinxxy_filter
                 })
             });
-            const gumroadRes = await fetch("http://localhost:5000/api/v1/sales/gumroad", {
+            const gumroadRes = await fetch("https://api.marakusa.me/api/v1/sales/gumroad", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
