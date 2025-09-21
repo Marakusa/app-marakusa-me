@@ -75,6 +75,7 @@ function Library({ archived }: LibraryProps) {
     const { api } = useApi();
     const { isSignedIn, fetchProfile } = useProfile();
     const [downloadingFiles, setDownloadingFiles] = useState<string[]>([]);
+    const [downloadProgress, setDownloadProgress] = useState<Record<string, number>>({});
 
     const navigate = useNavigate();
     const [downloadError, setDownloadError] = useState<string | null>(null);
@@ -103,26 +104,60 @@ function Library({ archived }: LibraryProps) {
             return;
         }
 
-        setDownloadingFiles(prev => [...prev, file]); // start downloading
+        setDownloadingFiles(prev => [...prev, file]);
+        setDownloadProgress(prev => ({ ...prev, [file]: 0 }));
         
         try {
             if (archived) {
-                const archived = true; // or set accordingly
                 const auth = localStorage.getItem("auth");
                 const token = localStorage.getItem("token");
 
-                // Call your download endpoint
-                const response = await fetch(apiPath + "/api/v1/file/download", {
+                const response = await fetch(`${apiPath}/api/v1/file/download`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ product: productId, file, archived, auth, token })
+                    body: JSON.stringify({ product: productId, file, archived: true, auth, token }),
                 });
 
-                const blob = await response.blob();
+                if (!response.ok) throw new Error(`Failed to download file: ${response.statusText}`);
+
+                const contentLength = response.headers.get("Content-Length");
+                const total = contentLength ? parseInt(contentLength) : undefined;
+
+                const reader = response.body?.getReader();
+                if (!reader) throw new Error("ReadableStream not supported");
+
+                const chunks: Uint8Array[] = [];
+                let received = 0;
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    if (value) {
+                        chunks.push(value);
+                        received += value.length;
+                        if (total) {
+                            setDownloadProgress(prev => ({
+                                ...prev,
+                                [file]: Math.round((received / total) * 100),
+                            }));
+                        }
+                    }
+                }
+
+                const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+                const fullArray = new Uint8Array(totalLength);
+                let offset = 0;
+                for (const chunk of chunks) {
+                    fullArray.set(chunk, offset);
+                    offset += chunk.length;
+                }
+
+                const blob = new Blob([fullArray], { type: "application/octet-stream" });
+
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = file; // preserve filename
+                a.download = file;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -140,6 +175,7 @@ function Library({ archived }: LibraryProps) {
                             window.location.href = response.data.downloadUrl;
                         } else {
                             console.error("Error downloading file:", response.error);
+                            setDownloadError(response.error);
                             throw new Error(response.error);
                         }
                     });
@@ -149,6 +185,7 @@ function Library({ archived }: LibraryProps) {
             setDownloadError((err as Error).message);
         } finally {
             setDownloadingFiles(prev => prev.filter(f => f !== file));
+            setDownloadProgress(prev => ({ ...prev, [file]: 0 }));
         }
     }
 
@@ -722,7 +759,7 @@ function Library({ archived }: LibraryProps) {
                                                                 {file.type !== "directory" ?
                                                                     (
                                                                         downloadingFiles.includes(file.name) ? (
-                                                                            <div className="w-6 h-6 min-w-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                                            <CircularProgress progress={downloadProgress[file.name] || 0} size={24} strokeWidth={2} />
                                                                         ) : (
                                                                             <GoDownload className="w-6 h-6 min-w-6" />
                                                                         )) :
@@ -805,6 +842,49 @@ function Library({ archived }: LibraryProps) {
                 </div>
             </div>
         </>
+    );
+}
+
+interface CircularProgressProps {
+    progress: number; // 0 - 100
+    size?: number; // optional size in px
+    strokeWidth?: number;
+    color?: string;
+}
+
+export function CircularProgress({
+    progress,
+    size = 24,
+    strokeWidth = 2,
+    color = "white",
+}: CircularProgressProps) {
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference * (1 - progress / 100);
+
+    return (
+        <svg width={size} height={size}>
+            <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                stroke="rgba(255,255,255,0.2)" // background circle
+                strokeWidth={strokeWidth}
+                fill="none"
+            />
+            <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                stroke={color}
+                strokeWidth={strokeWidth}
+                fill="none"
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                strokeLinecap="round"
+                transform={`rotate(-90 ${size / 2} ${size / 2})`} // start from top
+            />
+        </svg>
     );
 }
 
