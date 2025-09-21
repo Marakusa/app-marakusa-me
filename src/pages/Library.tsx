@@ -1,4 +1,4 @@
-import { cdnPath } from "../public.config.json";
+import { apiPath, cdnPath } from "../public.config.json";
 import { useApi } from "../ApiContext";
 import { SiAdobe } from "react-icons/si";
 import { CiFileOn, CiFolderOn } from "react-icons/ci";
@@ -74,6 +74,7 @@ function Library({ archived }: LibraryProps) {
     const { currentProductId } = useParams<{ currentProductId: string }>();
     const { api } = useApi();
     const { isSignedIn, fetchProfile } = useProfile();
+    const [downloadingFiles, setDownloadingFiles] = useState<string[]>([]);
 
     const navigate = useNavigate();
     const [downloadError, setDownloadError] = useState<string | null>(null);
@@ -97,22 +98,58 @@ function Library({ archived }: LibraryProps) {
         error: null
     });
 
-    function downloadFile(file: string, productId: string) {
-        api.generateDownloadToken(productId, file, archived ?? false, localStorage.getItem("auth"), localStorage.getItem("token"))
-            .then(async (response) => {
-                console.log("Download response:", response);
-                if (!response.error) {
-                    if (!response.data?.downloadUrl) {
-                        setDownloadError("No download URL found in the response.");
-                        throw new Error("No download URL found in the response.");
-                    }
+    async function downloadFile(file: string, productId: string) {
+        if (downloadingFiles.length > 0) {
+            return;
+        }
 
-                    window.location.href = response.data.downloadUrl;
-                } else {
-                    console.error("Error downloading file:", response.error);
-                    throw new Error(response.error);
-                }
-            });
+        setDownloadingFiles(prev => [...prev, file]); // start downloading
+        
+        try {
+            if (archived) {
+                const archived = true; // or set accordingly
+                const auth = localStorage.getItem("auth");
+                const token = localStorage.getItem("token");
+
+                // Call your download endpoint
+                const response = await fetch(apiPath + "/api/v1/file/download", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ product: productId, file, archived, auth, token })
+                });
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = file; // preserve filename
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            } else {
+                api.generateDownloadToken(productId, file, archived ?? false, localStorage.getItem("auth"), localStorage.getItem("token"))
+                    .then(async (response) => {
+                        console.log("Download response:", response);
+                        if (!response.error) {
+                            if (!response.data?.downloadUrl) {
+                                setDownloadError("No download URL found in the response.");
+                                throw new Error("No download URL found in the response.");
+                            }
+                            
+                            window.location.href = response.data.downloadUrl;
+                        } else {
+                            console.error("Error downloading file:", response.error);
+                            throw new Error(response.error);
+                        }
+                    });
+            }
+        } catch (err) {
+            console.error("Download failed:", err);
+            setDownloadError((err as Error).message);
+        } finally {
+            setDownloadingFiles(prev => prev.filter(f => f !== file));
+        }
     }
 
     function fetchToolCode() {
@@ -683,7 +720,12 @@ function Library({ archived }: LibraryProps) {
                                                                     <p className="text-sm text-zinc-300 uppercase">{file.type === "directory" ? "" : file.displayName.includes('.') ? file.displayName.substring(file.displayName.lastIndexOf('.') + 1) + " • " : "file • "}{file.size !== undefined ? formatFileSize(file.size) : file.type === "directory" ? "" : "???"}</p>
                                                                 </div>
                                                                 {file.type !== "directory" ?
-                                                                    (<GoDownload className="w-6 h-6 min-w-6" />) :
+                                                                    (
+                                                                        downloadingFiles.includes(file.name) ? (
+                                                                            <div className="w-6 h-6 min-w-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                                        ) : (
+                                                                            <GoDownload className="w-6 h-6 min-w-6" />
+                                                                        )) :
                                                                     (<BiSubdirectoryRight className="w-6 h-6 min-w-6" />)}
                                                             </div>
                                                         ))}
