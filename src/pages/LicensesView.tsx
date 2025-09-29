@@ -197,23 +197,6 @@ function LicensesView() {
                         </div>
                     </div>
 
-                    {!userLookingUp && (
-                        <div className="bg-zinc-900 text-white rounded-3xl shadow-lg shadow-black/20 p-6 space-y-8">
-                            <div className="flex flex-wrap gap-2">
-                                {profiles.map((profile) => (
-                                    <div key={profile.id} id="profile-button" className="flex items-center cursor-pointer select-none p-2 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
-                                        <p className="text-white mx-3 hidden lg:block">{profile.discordId}</p>
-                                    </div>
-                                ))}
-                                {loading ? (<p>Loading...</p>) : (
-                                    <div id="profile-button" onClick={loadMore} className="flex items-center cursor-pointer select-none p-2 rounded-3xl bg-blue-900 hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
-                                        <p className="text-white mx-3 hidden lg:block">Load More</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
                     {userLookingUp && (
                         <>
                             <div className="bg-zinc-900 text-white rounded-3xl shadow-lg shadow-black/20 p-6 space-y-8">
@@ -293,6 +276,24 @@ function LicensesView() {
                             )}
                         </>
                     )}
+
+                    <div className="bg-zinc-900 text-white rounded-3xl shadow-lg shadow-black/20 p-6 space-y-8">
+                        <div className="flex flex-wrap gap-2">
+                            {profiles.map((profile) => (
+                                <div key={profile.id} id="profile-button" onClick={() => {
+                                    setUserLookUp(profile.discordId);
+                                    lookUpUser();
+                                }} className="flex items-center cursor-pointer select-none p-2 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
+                                    <p className="text-white mx-3 hidden lg:block">{profile.discordId}</p>
+                                </div>
+                            ))}
+                            {loading ? (<p>Loading...</p>) : (
+                                <div id="profile-button" onClick={loadMore} className="flex items-center cursor-pointer select-none p-2 rounded-3xl bg-blue-900 hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
+                                    <p className="text-white mx-3 hidden lg:block">Load More</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </>
