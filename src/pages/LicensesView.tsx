@@ -34,7 +34,7 @@ function LicensesView() {
     const [licenseList, setLicenseList] = useState<LicenseList>();
 
     async function fetchProfiles(append: boolean = false) {
-        if (loading || userLookingUp) {
+        if (loading) {
             return;
         }
 
@@ -74,9 +74,6 @@ function LicensesView() {
     }
 
     async function fetchUserProfile(discordId: string) {
-        console.log("p");
-        console.log(loading);
-        console.log(userLookingUp);
         if (loading) {
             return;
         }
