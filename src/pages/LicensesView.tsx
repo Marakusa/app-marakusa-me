@@ -18,9 +18,6 @@ interface LicenseList {
     data: LicenseType[];
     error: string | null;
 }
-interface Stores {
-    [key: string]: { [key: string]: string };
-}
 
 function LicensesView() {
     const navigate = useNavigate();

@@ -7,8 +7,6 @@ function Admin() {
     const { isSignedIn, getSessionProfile } = useProfile();
 
     const [render, setRender] = useState(false);
-    const [adminData, setAdminData] = useState<any>(null);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         isSignedIn().then((signedIn) => {
@@ -34,11 +32,6 @@ function Admin() {
             <title>Dashboard - Admin</title>
             <div className="max-w-5xl mx-auto p-5 mt-27">
                 <h2 className="text-4xl font-bold mb-6">Admin Dashboard</h2>
-                {error && (
-                    <div className="bg-red-500 text-white rounded-2xl p-4 mb-4">
-                        {error}
-                    </div>
-                )}
                 <div className="flex flex-col gap-4">
                     <div className="bg-zinc-900 text-white rounded-3xl shadow-lg shadow-black/20 p-6 space-y-8">
                         <div className="flex flex-row gap-6 justify-center">
