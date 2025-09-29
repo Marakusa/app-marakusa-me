@@ -112,13 +112,14 @@ function LicensesView() {
         }
     }
 
-    function lookUpUser() {
-        if (userLookUp == "" || !userLookUp) {
+    function lookUpUser(discordId: string) {
+        setUserLookUp(discordId);
+        if (discordId == "" || !discordId) {
             setUserLookingUp(false);
             return;
         }
         setUserLookingUp(true);
-        fetchUserProfile(userLookUp);
+        fetchUserProfile(discordId);
     }
 
     function loadMore() {
@@ -191,7 +192,7 @@ function LicensesView() {
                                 onChange={(event) => setUserLookUp(event.target.value)}
                                 className="bg-zinc-800 text-white rounded-xl p-2 w-full"
                             />
-                            <div onClick={() => { lookUpUser(); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors text-nowrap select-none">
+                            <div onClick={() => { lookUpUser(document.getElementById('discord-id')?.innerText ?? ""); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors text-nowrap select-none">
                                 <p>Look Up</p>
                             </div>
                         </div>
@@ -281,8 +282,7 @@ function LicensesView() {
                         <div className="flex flex-wrap gap-2">
                             {profiles.map((profile) => (
                                 <div key={profile.id} id="profile-button" onClick={() => {
-                                    setUserLookUp(profile.discordId);
-                                    lookUpUser();
+                                    lookUpUser(profile.discordId);
                                 }} className="flex items-center cursor-pointer select-none p-2 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
                                     <p className="text-white mx-3 hidden lg:block">{profile.discordId}</p>
                                 </div>
