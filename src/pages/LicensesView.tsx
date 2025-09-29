@@ -281,7 +281,8 @@ function LicensesView() {
                                 <div key={profile.id} id="profile-button" onClick={() => {
                                     lookUpUser(profile.discordId);
                                 }} className="flex items-center cursor-pointer select-none p-2 rounded-3xl hover:bg-zinc-950/50 border border-transparent hover:border-zinc-900">
-                                    <p className="text-white mx-3 hidden lg:block">{profile.discordId}</p>
+                                    <img src={profile.avatar} alt="Avatar" className="w-8 h-8 rounded-full" />
+                                    <p className="text-white ml-3 hidden lg:block">{profile.discordId}</p>
                                 </div>
                             ))}
                             {loading ? (<p>Loading...</p>) : (
