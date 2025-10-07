@@ -48,13 +48,14 @@ const TermsOfService: React.FC = () => {
 
                     <h3 className="text-xl font-semibold mt-6">Additional Notes:</h3>
                     <ul className="list-disc list-inside m-4">
+                        <li>When you are purchasing any of my products, you are purchasing a license for it. If you violate any of my terms, I may revoke your license(s) and your access to the product(s).</li>
                         <li>The creator retains full credit for the avatar base, regardless of any modifications.</li>
                         <li>The creator is not responsible for inappropriate or unauthorized usage.</li>
                         <li>The creator may use the avatar for advertising or commercial purposes.</li>
                         <li>If you'd like to create and sell your own version of this avatar, you must contact the base creator.</li>
                         <li>All future updates to the avatar are provided free of charge to clients who already own the product.</li>
                         <li>These terms may change at any time without notice.</li>
-                        <li>This is a digital item—all sales are final and non-refundable.</li>
+                        <li>This is a digital item. All sales are final and non-refundable.</li>
                     </ul>
                 </div>
             </div>
