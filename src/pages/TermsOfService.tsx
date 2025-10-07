@@ -48,14 +48,17 @@ const TermsOfService: React.FC = () => {
 
                     <h3 className="text-xl font-semibold mt-6">Additional Notes:</h3>
                     <ul className="list-disc list-inside m-4">
-                        <li>When you are purchasing any of my products, you are purchasing a license for it. If you violate any of my terms, I may revoke your license(s) and your access to the product(s).</li>
-                        <li>The creator retains full credit for the avatar base, regardless of any modifications.</li>
-                        <li>The creator is not responsible for inappropriate or unauthorized usage.</li>
-                        <li>The creator may use the avatar for advertising or commercial purposes.</li>
-                        <li>If you'd like to create and sell your own version of this avatar, you must contact the base creator.</li>
-                        <li>All future updates to the avatar are provided free of charge to clients who already own the product.</li>
-                        <li>These terms may change at any time without notice.</li>
-                        <li>This is a digital item. All sales are final and non-refundable.</li>
+                        <li>By purchasing or downloading any of my products, you confirm that you have read, understood, and agree to these terms of use, which apply to all current and future products released by the creator.</li>
+                        <li>When purchasing my products, you are obtaining a personal, non-transferable license to use them under these terms. If these terms are violated, I reserve the right to revoke your license and access to the affected product(s).</li>
+                        <li>The creator retains full authorship and copyright of all products, including avatar bases, models, textures, and related materials, regardless of any edits or modifications made by the user.</li>
+                        <li>The creator is not responsible for any improper, unauthorized, or unethical use of the products by others.</li>
+                        <li>The creator may use their own products, including avatars or assets, for portfolio, promotional, or commercial purposes.</li>
+                        <li>If you wish to create and sell your own versions, derivatives, or modifications of any of the creator's avatars, bases, or assets, you must first obtain written permission from the creator.</li>
+                        <li>All future updates to purchased products will be provided free of charge to verified owners of those products.</li>
+                        <li>These terms may be updated at any time. Continued use of the products after such changes constitutes acceptance of the revised terms.</li>
+                        <li>
+                            <strong>Refund Policy:</strong> All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins, in accordance with EU Directive 2019/770. Refunds will only be issued if the product is defective or not as described.
+                        </li>
                     </ul>
                 </div>
             </div>
