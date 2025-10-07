@@ -57,7 +57,7 @@ const TermsOfService: React.FC = () => {
                         <li>All future updates to purchased products will be provided free of charge to verified owners of those products.</li>
                         <li>These terms may be updated at any time. Continued use of the products after such changes constitutes acceptance of the revised terms.</li>
                         <li>
-                            <strong>Refund Policy:</strong> All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins, in accordance with EU Directive 2019/770. Refunds will only be issued if the product is defective or not as described.
+                            <strong>Refund Policy:</strong> All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins. Refunds will only be issued if the product is defective or not as described.
                         </li>
                     </ul>
                 </div>
