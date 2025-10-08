@@ -56,9 +56,7 @@ const TermsOfService: React.FC = () => {
                         <li>If you wish to create and sell your own versions, derivatives, or modifications of any of the creator's avatars, bases, or assets, you must first obtain written permission from the creator.</li>
                         <li>All future updates to purchased products will be provided free of charge to verified owners of those products.</li>
                         <li>These terms may be updated at any time. Continued use of the products after such changes constitutes acceptance of the revised terms.</li>
-                        <li>
-                            <strong>Refund Policy:</strong> All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins. Refunds will only be issued if the product is defective or not as described.
-                        </li>
+                        <li>All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins. Refunds will only be issued if the product is defective, not as described, or if all of the assets are not delivered as promised. Any other cases can be discussed. For customers outside of Finland, your local laws apply.</li>
                     </ul>
                 </div>
             </div>
