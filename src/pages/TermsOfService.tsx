@@ -57,6 +57,7 @@ const TermsOfService: React.FC = () => {
                         <li>All future updates to purchased products will be provided free of charge to verified owners of those products.</li>
                         <li>These terms may be updated at any time. Continued use of the products after such changes constitutes acceptance of the revised terms.</li>
                         <li>All products are digital and delivered immediately after purchase. By purchasing, you consent to immediate access and acknowledge that your right to withdraw (cancel/refund) is waived once the download or access begins. Refunds will only be issued if the product is defective, not as described, or if all of the assets are not delivered as promised. Any other cases can be discussed. For customers outside of Finland, your local laws apply.</li>
+                        <li>When a refund or cancellation is processed, your license and access to all associated assets are revoked. After revocation, you are required to remove any copies of the product files, as further use is not permitted.</li>
                     </ul>
                 </div>
             </div>
