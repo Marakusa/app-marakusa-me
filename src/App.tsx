@@ -19,6 +19,7 @@ import { ApiProvider } from "./ApiContext";
 import Admin from "./pages/Admin";
 import SalesView from "./pages/SalesView";
 import LicensesView from "./pages/LicensesView";
+import ToolAuth from "./pages/ToolAuth";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
               <Route path="/licenses" element={<Licenses />} />
               <Route path="/signin" element={<SignIn />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/tool/auth" element={<ToolAuth />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/sales" element={<SalesView />} />
