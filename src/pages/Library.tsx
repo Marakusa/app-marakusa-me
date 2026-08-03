@@ -77,6 +77,8 @@ function Library({ archived }: LibraryProps) {
   const [downloadingFiles, setDownloadingFiles] = useState<string[]>([]);
   const [downloadProgress, setDownloadProgress] = useState<Record<string, number>>({});
 
+  const [legacyShow, setLegacyShow] = useState(false);
+
   const navigate = useNavigate();
   const [downloadError, setDownloadError] = useState<string | null>(null);
   const [files, setFiles] = useState<FileFetch>({
@@ -619,7 +621,13 @@ function Library({ archived }: LibraryProps) {
               {(privateFiles.fetched && localStorage.getItem("auth") && localStorage.getItem("token") && !currentProductId && !archived) ? (
                 <div className="flex flex-col gap-4 text-left bg-zinc-900 rounded-3xl shadow-lg shadow-black/20 p-8">
                   <p className="text-3xl flex gap-3"><FaDownload className="mt-[2px]" /> Downloads</p>
-                  <p>Use the tool installer to install assets and avatars to Unity projects.</p>
+                  <div className="flex flex-col gap-2 justify-center items-center bg-orange-300/30 font-bold rounded-3xl shadow-lg shadow-black/20 border border-orange-300 p-4">
+                    ⚠️ DISCLAIMER: The installer tool DOES NOT fingerprint files, inject anything into your computer, or collect any personal information. It is a simple tool that downloads and installs files and dependencies to your Unity project. The tool CAN BE REMOVED after installation, and the files will remain in your project.
+                  </div>
+                  <div className="flex flex-col gap-2 justify-center items-center bg-blue-300/30 font-bold rounded-3xl shadow-lg shadow-black/20 border border-blue-300 p-4">
+                    ℹ️ If you do not wish to use the installer tool, you can download the files directly from the library BELOW this section and import them manually into your Unity project.
+                  </div>
+                  <p>Use the tool installer to install assets and avatars to Unity projects including the required dependencies.</p>
                   {(() => {
                     // Find all files starting with MarasToolInstaller_
                     const toolInstallers = files.files
@@ -652,23 +660,28 @@ function Library({ archived }: LibraryProps) {
                   <p>After downloading and importing the tool to Unity, you can access it from the tool bar:<br></br>
                     <b>Tools &gt; Mara's Tool Installer</b>
                   </p>
-                  <div
-                    className="w-136 h-30 rounded-2xl border border-zinc-700/30 shadow-lg shadow-black/20 mb-4 bg-cover bg-center"
-                    style={{ backgroundImage: "url(/tutorial_tool_auth.jpg)" }}
-                  ></div>
-                  <p>When the editor plugin asks for an authentication code, you can generate one below.</p>
-                  {!toolCode.generating && toolCode.error ? (<p className="text-red-400">{toolCode.error}</p>) : (toolCode.code && toolCode.generated && <>
-                    <p>Don't share the code with anyone! The code expires in 10 minutes.</p>
-                    <input id="tool_code" type="text" disabled placeholder="" className="p-2 px-4 w-full rounded-full bg-zinc-950" value={toolCode.code ?? ""} />
-                    <p className="text-sm text-zinc-500">The code has been copied to your clipboard.</p>
-                  </>)}
-                  <div onClick={() => { fetchToolCode(); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full select-none">
-                    {toolCode.generating ? (
-                      <div className="animate-spin rounded-full border-2 border-white border-t-transparent w-6 h-6"></div>
-                    ) : (
-                      <p>Generate Code</p>
-                    )}
-                  </div>
+
+                  <p onClick={() => { setLegacyShow(!legacyShow) }} className="text-blue-400 hover:underline flex items-center gap-1 font-bold cursor-pointer">Using the Legacy version?</p>
+
+                  {legacyShow && <>
+                    <div
+                      className="w-136 h-30 rounded-2xl border border-zinc-700/30 shadow-lg shadow-black/20 mb-4 bg-cover bg-center"
+                      style={{ backgroundImage: "url(/tutorial_tool_auth.jpg)" }}
+                    ></div>
+                    <p>When the editor plugin asks for an authentication code, you can generate one below.</p>
+                    {!toolCode.generating && toolCode.error ? (<p className="text-red-400">{toolCode.error}</p>) : (toolCode.code && toolCode.generated && <>
+                      <p>Don't share the code with anyone! The code expires in 10 minutes.</p>
+                      <input id="tool_code" type="text" disabled placeholder="" className="p-2 px-4 w-full rounded-full bg-zinc-950" value={toolCode.code ?? ""} />
+                      <p className="text-sm text-zinc-500">The code has been copied to your clipboard.</p>
+                    </>)}
+                    <div onClick={() => { fetchToolCode(); }} className="flex flex-col gap-2 justify-center items-center bg-zinc-800 text-zinc-300 p-2 px-4 rounded-full hover:bg-zinc-800/70 cursor-pointer transition-colors w-full select-none">
+                      {toolCode.generating ? (
+                        <div className="animate-spin rounded-full border-2 border-white border-t-transparent w-6 h-6"></div>
+                      ) : (
+                        <p>Generate Code</p>
+                      )}
+                    </div>
+                  </>}
                 </div>
               ) : (<></>)}
 
