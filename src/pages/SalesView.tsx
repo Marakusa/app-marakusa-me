@@ -203,7 +203,7 @@ function SalesView() {
                                                             const d = new Date(sale.date);
                                                             return `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth() + 1).toString().padStart(2, "0")}`;
                                                         })() : "-"}</td>
-                                                        <td className="px-4 py-2">{sale.email}<span className="text-zinc-400 italic pl-4">{sale.username ? sale.username : ""}</span></td>
+                                                        <td className="px-4 py-2"><span className="text-zinc-400 italic pl-4">{sale.username ? sale.username : ""}</span></td>
                                                         <td className="px-4 py-2">
                                                             {(sale.total || 0).toLocaleString("en-US", { style: "currency", currency: "USD" })}
                                                         </td>

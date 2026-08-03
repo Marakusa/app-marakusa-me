@@ -45,7 +45,7 @@ function Settings() {
     async function connectConnection(platform: string) {
         switch (platform) {
             case "discord":
-                window.location.href = `https://discord.com/oauth2/authorize?response_type=code&client_id=${discordClientId}&scope=email+identify&redirect_uri=${encodeURIComponent(discordRedirectUri)}`;
+                window.location.href = `https://discord.com/oauth2/authorize?response_type=code&client_id=${discordClientId}&scope=identify&redirect_uri=${encodeURIComponent(discordRedirectUri)}`;
                 break;
             default:
                 console.error("Unknown platform");

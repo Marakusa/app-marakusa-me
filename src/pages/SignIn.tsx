@@ -37,7 +37,7 @@ function SignIn() {
                 <div className="flex flex-row gap-4">
                     <a
                         className="flex flex-row items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-full w-fit cursor-pointer border border-blue-500 hover:bg-blue-700 shadow-lg shadow-black/40"
-                        href={`https://discord.com/oauth2/authorize?response_type=code&client_id=${discordClientId}&scope=email+identify&redirect_uri=${encodeURIComponent(discordRedirectUri)}`}>
+                        href={`https://discord.com/oauth2/authorize?response_type=code&client_id=${discordClientId}&scope=identify&redirect_uri=${encodeURIComponent(discordRedirectUri)}`}>
                         <FaDiscord /> Continue with Discord
                     </a>
                 </div>

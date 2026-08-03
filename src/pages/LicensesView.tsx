@@ -11,7 +11,6 @@ interface LicenseProfileData {
     discordId: string;
     username: string;
     avatar: string;
-    email: string;
 }
 interface LicenseList {
     fetched: boolean;
@@ -206,7 +205,6 @@ function LicensesView() {
                                                 <img src={profile.avatar + "?size=512"} alt="Avatar" className="w-48 h-48 rounded-full" />
                                                 <div className="flex flex-col text-left gap-6 justify-center">
                                                     <p className="text-6xl font-bold">{profile.username}</p>
-                                                    {profile.email && (<p className="text-xl">{profile.email}</p>)}
                                                 </div>
                                             </div>
                                         </>

@@ -32,7 +32,6 @@ export interface LicenseType {
     $updatedAt: string;
     $permissions: any[];
     user_id: {
-        email: string;
         discord_id: string;
         gumroad_id: string;
         createdAt: string;
