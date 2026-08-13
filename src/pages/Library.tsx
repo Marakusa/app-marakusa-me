@@ -304,7 +304,7 @@ function Library({ archived }: LibraryProps) {
           for (const product of products) {
             const data = await product.files;
 
-            if (data.error) {
+            if (!data || data.error) {
               setPrivateFiles(() => ({
                 fetched: true,
                 error: data.error,
