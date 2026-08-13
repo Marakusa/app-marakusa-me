@@ -304,10 +304,14 @@ function Library({ archived }: LibraryProps) {
           for (const product of products) {
             const data = await product.files;
 
-            if (!data || data.error) {
+            if (!data || data === null) {
+              return;
+            }
+
+            if (data.error) {
               setPrivateFiles(() => ({
                 fetched: true,
-                error: data.error,
+                error: data?.error || "An error occurred while fetching private files.",
                 products: [],
                 archivedProducts: [...archivedList]
               }));
@@ -371,10 +375,14 @@ function Library({ archived }: LibraryProps) {
 
             const data = await product.files;
 
+            if (!data || data === null) {
+              return;
+            }
+
             if (data.error) {
               setPrivateFiles(() => ({
                 fetched: true,
-                error: data.error,
+                error: data?.error || "An error occurred while fetching archived files.",
                 products: [...productList],
                 archivedProducts: []
               }));
